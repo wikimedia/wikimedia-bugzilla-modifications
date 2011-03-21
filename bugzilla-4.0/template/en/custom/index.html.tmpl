@@ -37,9 +37,11 @@
 <link rel="stylesheet" href="skins/custom/index.css" media="screen" />
 
 <div id="page-index">
+  [% IF user.settings.skin.value=='Wikimedia' %]
   <div class="intro">
-    <img src="skins/custom/bugzilla-ayb.png" width="308" height="236" border="2" alt="bugzzz"/>
+    <img src="skins/contrib/Wikimedia/bugzilla-ayb.png" width="308" height="236" border="2" alt="bugzzz"/>
   </div>
+  [% END %]
 
   <p>This is the new bug tracker for <a
 href="http://www.mediawiki.org/">MediaWiki</a> and its extensions
