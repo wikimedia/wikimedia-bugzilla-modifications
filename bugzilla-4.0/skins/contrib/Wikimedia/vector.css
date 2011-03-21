@@ -14,6 +14,7 @@ body {
 #content-container {
 	margin-left: 10em;
 	padding: 1em;
+	padding-bottom: 2em;
 	background-image: url(images/border.png);
 	background-position: top left;
 	background-repeat: repeat-y;
@@ -28,7 +29,7 @@ body {
 	background-repeat: repeat-x;
 }
 #head-base {
-	margin-top: -2.5em;
+	margin-top: -2em;
 	margin-left: 10em;
 	height: 2.5em;
 	background-image: url(images/border.png);
@@ -40,6 +41,7 @@ body {
 	top: 0;
 	right: 0;
 	width: 100%;
+	background-color:: #F3F3F3;
 }
 #head h5 {
 	margin: 0;
@@ -51,10 +53,7 @@ body {
 	}
 	/* Personal */
 	#p-personal #mini_login_container .mini_login {
-	        margin-left:-6px;
-        	margin-right:6px;
-        	margin-top:-5px;
-        	margin-bottom:-1px;
+        	margin-top:-1.5em;
 	}
 	#p-personal #forgot_container .mini_forgot {
                 margin-left:-6px;
@@ -158,7 +157,6 @@ body {
 	top: 160px;
 	padding-top: 1em;
 	width: 10em;
-	left: 0;
 }
 	#panel div.portal {
 		padding-bottom: 1.5em;
@@ -168,7 +166,7 @@ body {
 		color: #444444;
 		padding: 0.25em;
 		padding-top: 0;
-		padding-left: 1.75em;
+		padding-left: 1em;
 		margin: 0.25em 0;
 		cursor: default;
 		border: none;
@@ -176,7 +174,7 @@ body {
 	#panel div.portal div.body {
 		margin: 0;
 		padding-top: 0.5em;
-		margin-left: 1.25em;
+		padding-right: 0.2em;
 		background-image: url(images/portal-break.png);
 		background-repeat: no-repeat;
 		background-position: top left;
@@ -186,10 +184,11 @@ body {
 		list-style-image: none;
 		list-style-type: none;
 		padding: 0;
-		margin: 0;
+		margin-left: 1em;
 	}
 	#panel div.portal div.body ul li {
 		line-height: 1.125em;
+		font-size: 0.9em;
 		padding: 0;
 		padding-bottom: 0.5em;
 		margin: 0;
@@ -265,8 +264,6 @@ body {
 div.tabbed {
 	background-color:#F9F9F9;
 	background-image:url(images/preferences-base.png);
-	#border: solid #CCCCCC;
-	#border-width: 0 1px 1px 1px;
 	clear:both;
 	width:100%;
 	margin: 2.25em 0 0 0;
@@ -278,7 +275,6 @@ div.tabbed {
         border-width: 1px;
 }
 div.tabbody table td, div.tabbody table th, #bodyContent form table td, #bodyContent form table th {
-        border:none !important;
 	padding: 0.15em 0.25em; 
 	line-height: 1.75em;
 }
@@ -290,6 +286,7 @@ table.tabs {
 	background-repeat:no-repeat;
 	margin: -2.25em 0 0 0;
 	padding-left: 1px;
+	padding-top: 1px;
 }
 .tabs tbody {
 	background-image:url(images/preferences-fade.png);
@@ -304,8 +301,6 @@ table.tabs {
 	background-color: white;
 	background-position:right bottom;
 	background-repeat:no-repeat;
-	border: solid #CCCCCC;
-        border-width: 0 0 1px 0;
         text-align: center;
 	margin:0;
 	padding:0 .75em 3px .75em;
@@ -322,7 +317,6 @@ table.tabs {
 .tabs td.selected {
 	background-color:transparent;
 	color:#333333;
-	border-width: 0;
 	text-decoration:none;
 }
 .tabs td.spacer {

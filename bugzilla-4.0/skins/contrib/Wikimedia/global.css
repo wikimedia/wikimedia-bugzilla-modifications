@@ -110,13 +110,12 @@
  * to both the header and footer. 
  */
     #footer {
+        background: #f3f3f3;
         background-image:url("images/border.png");
         background-position:left top;
         background-repeat:repeat-x;
         margin-left:10em;
         margin-top:0;
-        padding:0.75em;
-	background: #F3F3F3;
 	border-bottom: none;
 	border-top: none;
 }
@@ -298,6 +297,9 @@ dl dl > dt {
 }
 
 table.bz_time_tracking_table {
+    border-collapse: collapse;
+    border: 1px solid silver !important;
+    width: 52em;
     padding: 0.3em 0.3em 0.3em 0.5em;
 }
 #attachment_table th, .bz_attach_footer, .bz_time_tracking_table th {
@@ -306,7 +308,7 @@ table.bz_time_tracking_table {
 }
 
 #attachment_table td, .bz_time_tracking_table th, .bz_time_tracking_table td {
-    border: 1px solid #333333;
+    border: 1px solid silver !important;
 }
 
 .bz_attach_extra_info {
@@ -366,6 +368,7 @@ div.user_match {
     background-image:url("images/preferences-break.png");
     background-position:right bottom;
     background-repeat:no-repeat;
+    text-align: center;
 }
 
 .tabs td.selected {

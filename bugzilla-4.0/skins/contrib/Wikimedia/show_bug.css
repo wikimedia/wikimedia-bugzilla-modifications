@@ -2,11 +2,12 @@
     margin: 8px 0; 
     padding: 0.3em 0.3em 0.3em 0.5em; 
     -moz-border-radius: 0.5em; 
-    font-size: 125%; 
+    font-size: 105%; 
     font-weight: bold;
     background:transparent url(images/block-base.png) repeat-x scroll center bottom;
     border: 1px solid silver;
     repeat: repeat-x;
+    line-height: 1.75em;
 }
 
 .bz_bug .edit_form {
