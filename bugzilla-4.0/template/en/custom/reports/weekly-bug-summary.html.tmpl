@@ -6,10 +6,10 @@
    title = "Wikimedia Weekly Bug Summary"
 %]
 
-<h3 style="text-align:center;">Total: [% totalbugs %] bugs and [% totalwishes %] wishes</h3>
+<h3 style="text-align:center;">Total: [% totalbugs %] bugs and [% totalwishes %] enhancements</h3>
 
 <h4 style="text-align:center;">[% new_open_bugs %] bugs opened, [% new_closed_bugs %] bugs closed in the last [% duration %] days<br>
-([% new_open_wishes %] wishes opened, [% new_closed_wishes %] wishes closed)</h4>
+([% new_open_wishes %] enhancements opened, [% new_closed_wishes %] enhancements closed)</h4>
 
 <form action="weekly-bug-summary.cgi" style="text-align:center;">Report top
 	[% sel = { name => 'tops'} %]
@@ -28,7 +28,7 @@ days and <input type="submit" value="Show" />
 <th>Opened in<br />last [% duration %] days</th>
 <th>Closed in<br />last [% duration %] days</th>
 <th>Change</th>
-<th>Open<br />wishes</th>
+<th>Open<br />enhancements</th>
 <th>Opened in<br />last [% duration %] days</th>
 <th>Closed in<br />last [% duration %] days</th>
 <th>Change</th>
@@ -41,7 +41,7 @@ days and <input type="submit" value="Show" />
 	<td style="text-align:right;">+[%- pr.bugs_opened -%]</td>
 	<td style="text-align:right;">-[%- pr.bugs_closed -%]</td>
 	<td style="text-align:right; background-color: [%- pr.bugs_change_color -%];">[%- pr.bugs_change -%]</td>
-	<td style="text-align:right;"><a href="buglist.cgi?product=[%- pr.name -%]&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_severity=wishlist">[%- pr.total_wishes -%]</a></td>
+	<td style="text-align:right;"><a href="buglist.cgi?product=[%- pr.name -%]&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_severity=enhancement">[%- pr.total_wishes -%]</a></td>
 	<td style="text-align:right;">+[%- pr.open_wishes -%]</td>
 	<td style="text-align:right;">-[%- pr.closed_wishes -%]</td>
 	<td style="text-align:right; background-color: [%- pr.wishes_change_color -%];">[%- pr.wishes_change -%]</td>

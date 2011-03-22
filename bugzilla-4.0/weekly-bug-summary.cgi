@@ -17,14 +17,14 @@ sub total_bugs_in_bugzilla()
 
     # figure out total bugs
     my (@totalbugs) = $dbh->selectrow_array(
-        "SELECT count(bugs.bug_id) FROM bugs WHERE bugs.bug_severity != 'wishlist' AND
+        "SELECT count(bugs.bug_id) FROM bugs WHERE bugs.bug_severity != 'enhancement' AND
          ( bugs.bug_status = 'NEW' or bugs.bug_status = 'ASSIGNED' or
          bugs.bug_status = 'REOPENED' or bugs.bug_status = 'UNCONFIRMED')"
     );
 
     # figure out total number of wishes
     my (@totalwishes) = $dbh->selectrow_array (
-        "SELECT count(bugs.bug_id) FROM bugs WHERE bugs.bug_severity = 'wishlist' AND
+        "SELECT count(bugs.bug_id) FROM bugs WHERE bugs.bug_severity = 'enhancement' AND
          ( bugs.bug_status = 'NEW' or bugs.bug_status = 'ASSIGNED' or
           bugs.bug_status = 'REOPENED' or bugs.bug_status = 'UNCONFIRMED')"
     );
@@ -43,7 +43,7 @@ sub bugs_opened()
     my ($count) = Bugzilla->dbh->selectrow_array(
         "SELECT count(bugs.bug_id) FROM bugs
          WHERE creation_ts >= from_days(to_days(NOW())-?)
-         $sqlproduct AND bugs.bug_severity != 'wishlist'", undef, ($days)
+         $sqlproduct AND bugs.bug_severity != 'enhancement'", undef, ($days)
     );
 
     return $count;
@@ -60,7 +60,7 @@ sub wishes_opened()
     my ($count) = Bugzilla->dbh->selectrow_array(
         "SELECT count(bugs.bug_id) FROM bugs
          WHERE creation_ts >= from_days(to_days(NOW())-?)
-         $sqlproduct AND bugs.bug_severity = 'wishlist'", undef, ($days)
+         $sqlproduct AND bugs.bug_severity = 'enhancement'", undef, ($days)
     );
 
     return $count;
@@ -80,7 +80,7 @@ select
 from
     bugs, bugs_activity
 where
-    bugs.bug_severity != 'wishlist' AND
+    bugs.bug_severity != 'enhancement' AND
     (bugs_activity.added='RESOLVED' or bugs_activity.added='CLOSED' or
      bugs_activity.added='NEEDSINFO')
 and
@@ -108,7 +108,7 @@ select
 from
     bugs, bugs_activity
 where
-    bugs.bug_severity = 'wishlist' AND
+    bugs.bug_severity = 'enhancement' AND
     (bugs_activity.added='RESOLVED' or bugs_activity.added='CLOSED' or
      bugs_activity.added='NEEDSINFO')
 and
@@ -134,7 +134,7 @@ sub open_wishes()
 SELECT
     count(bugs.bug_id)
 FROM bugs
-WHERE bugs.bug_severity = 'wishlist' AND
+WHERE bugs.bug_severity = 'enhancement' AND
       (bugs.bug_status = 'NEW' or bugs.bug_status = 'ASSIGNED' or
        bugs.bug_status = 'REOPENED' or bugs.bug_status = 'UNCONFIRMED')
 $sqlproduct");
@@ -161,7 +161,7 @@ where
     (bugs.bug_status = 'NEW' or bugs.bug_status = 'ASSIGNED' or
     bugs.bug_status = 'REOPENED' or bugs.bug_status = 'UNCONFIRMED')
 and
-    bugs.bug_severity != 'wishlist'
+    bugs.bug_severity != 'enhancement'
 and
     products.id = bugs.product_id
 
