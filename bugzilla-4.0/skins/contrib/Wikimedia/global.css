@@ -30,10 +30,6 @@
         background-color:#F3F3F3;
         background-image:url("images/page-base.png");
     }
-    body, td, th, input {
-        font-family: Verdana, sans-serif;
-        font-size: normal;
-    }
 /* global (end) */
 
 /* header (begin) */
@@ -118,6 +114,7 @@
         margin-top:0;
 	border-bottom: none;
 	border-top: none;
+	width: auto;
 }
 /* footer (end) */
 
