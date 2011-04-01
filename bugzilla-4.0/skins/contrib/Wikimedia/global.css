@@ -261,15 +261,16 @@ table#flags td {
 }
 
 #error_msg {
-    font-size: x-large;
+    font-size: large;
 }
 
 .throw_error {
-    background-color: #ff0000;
+    background-color: #FFF2F2;
     color: black;
     font-size: 120%;
     margin: 1em;
     padding: 0.5em 1em;
+    border: 2px solid red !important;
 }
 
 dt {
