@@ -10,6 +10,9 @@ body {
 	background-color: #f3f3f3;
 	background-image: url(images/page-base.png);
 }
+body, td, th, input {
+    font-family: sans-serif;
+}
 /* Content */
 #content-container {
 	margin-left: 10em;
