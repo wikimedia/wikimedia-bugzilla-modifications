@@ -112,9 +112,6 @@
     [%# This allows people to switch back to the "Classic" skin if they
       # are in another skin. 
       #%]
-    [% IF user.settings.skin.value=='Wikimedia' %]
-      <link rel="stylesheet" href="skins/contrib/Wikimedia/vector.css" media="screen" />
-    [% END %]
     <link href="[% 'skins/standard/global.css' FILTER mtime FILTER html %]"
           rel="alternate stylesheet" 
           title="[% setting_descs.standard FILTER html %]">
@@ -135,6 +132,10 @@
         [% PROCESS format_css_link css_set_name = alternate_skin %]
       [% END %]
     [% END %]
+    [% IF user.settings.skin.value=='Wikimedia' %]
+      <link rel="stylesheet" href="skins/contrib/Wikimedia/vector.css" media="screen" />
+    [% END %]
+
 
     [%# CSS cascade, part 4: page-specific styles.
       #%]
