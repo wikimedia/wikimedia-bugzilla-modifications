@@ -39,11 +39,11 @@ sub bug_format_comment {
         my $regexes = $args->{'regexes'};
         my $text = $args->{'text'};
         my $replacerWP = {
-                match => qr~\[\[([a-zA-Z0-9_ ,./'()!#%:\x80-\xff-]+)\]\]~,
+                match => qr{\[\[([a-zA-Z0-9_ ,./'()!#%:\x80-\xff-]+)\]\]},
                 replace => \&_createWikipediaLink
         };
 	my $replacerCR = {
-                match => qr~r(\d+)~,
+                match => qr{r(\d+)},
                 replace => \&_createCodeReviewLink
         };
          #~\br(\d+)\b
@@ -58,7 +58,7 @@ sub bug_format_comment {
 sub _createWikipediaLink {
         my $match_str = $1;
         my $tmp = html_quote($match_str);
-        my $wikipedia_link = "<a href=\"http://en.wikipedia.org/wiki/$tmp\">$tmp</a>";
+        my $wikipedia_link = "[[<a href=\"http://en.wikipedia.org/wiki/$tmp\">$tmp</a>]]";
        return $wikipedia_link;
 };  
 
