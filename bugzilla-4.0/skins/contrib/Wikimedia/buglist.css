@@ -47,3 +47,6 @@ tr.bz_bugitem:hover {
   font-weight:bold;
 }
 
+tr.bz_secure td.first-child {
+  padding-left: 18px;
+}
