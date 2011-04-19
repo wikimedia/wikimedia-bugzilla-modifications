@@ -39,7 +39,7 @@ sub bug_format_comment {
         my $regexes = $args->{'regexes'};
         my $text = $args->{'text'};
         my $replacerWP = {
-                match => qr{\[\[([a-zA-Z0-9_ ,./'()!#%:\x80-\xff-]+)\]\]},
+                match => qr{\[\[([a-zA-Z0-9_ ,./'()!#\*\$%:\x80-\xff-]+)\]\]},
                 replace => \&_createWikipediaLink
         };
 	my $replacerCR = {
