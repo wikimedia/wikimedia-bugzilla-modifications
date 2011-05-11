@@ -124,8 +124,7 @@ foreach($iter as $bug) {
 }
 
 foreach($bugList as $assignee => $bugs) {
-#	$message = "$assignee\n";
-	$message = "";
+	$message = "$assignee\n";
 	foreach($bugs as $bug) {
 		$message .= " http://bugzilla.wikimedia.org/{$bug->getID()}\n";
 #		$message .= "   {$bug->getPriorityText()} {$bug->getStatus()} {$bug->getSummary()}\n";
