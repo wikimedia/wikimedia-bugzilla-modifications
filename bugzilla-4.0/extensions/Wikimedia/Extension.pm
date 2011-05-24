@@ -58,7 +58,7 @@ sub bug_format_comment {
 sub _createWikipediaLink {
         my $match_str = $1;
         my $tmp = html_quote($match_str);
-        my $wikipedia_link = "[[<a href=\"http://en.wikipedia.org/wiki/$tmp\">$tmp</a>]]";
+        my $wikipedia_link = "[[<a href='http://en.wikipedia.org/w/index.php?title=Special:Search&go=Go&search=$tmp'>$tmp</a>]]";
        return $wikipedia_link;
 };  
 
