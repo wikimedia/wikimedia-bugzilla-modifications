@@ -1,7 +1,10 @@
 #!/usr/bin/php -f
 <?php
 
+require_once "$IP/includes/Defines.php";
 require_once "$IP/includes/AutoLoader.php";
+require_once "$IP/includes/GlobalFunctions.php";
+require_once "$IP/includes/DefaultSettings.php";
 require_once 'jsonRPCClient.php';
 
 class BugzillaBug {
