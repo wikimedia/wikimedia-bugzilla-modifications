@@ -47,7 +47,7 @@ sub bug_format_comment {
                 replace => \&_createCodeReviewLink
         };
          #~\br(\d+)\b
-         #      "<a href=\"http://www.mediawiki.org" .
+         #      "<a href=\"https://www.mediawiki.org" .
          #       "/wiki/Special:Code/MediaWiki/$1\" " .
          #       "title=\"revision $1 in SVN\">r$1</a>"
  
@@ -58,12 +58,12 @@ sub bug_format_comment {
 sub _createWikipediaLink {
         my $match_str = $1;
         my $tmp = html_quote($match_str);
-        my $wikipedia_link = "[[<a href='http://en.wikipedia.org/w/index.php?title=Special:Search&go=Go&search=$tmp'>$tmp</a>]]";
+        my $wikipedia_link = "[[<a href='https://en.wikipedia.org/w/index.php?title=Special:Search&go=Go&search=$tmp'>$tmp</a>]]";
        return $wikipedia_link;
 };  
 
 sub _createCodeReviewLink {
-        my $rev_link = "<a href=\"http://www.mediawiki.org/wiki/Special:Code/MediaWiki/$1\" title=\"revision $1 in SVN\">r$1</a>";
+        my $rev_link = "<a href=\"https://www.mediawiki.org/wiki/Special:Code/MediaWiki/$1\" title=\"revision $1 in SVN\">r$1</a>";
        return $rev_link;
 };
  
