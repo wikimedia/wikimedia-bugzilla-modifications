@@ -45,6 +45,10 @@ sub bug_format_comment {
 		match => qr{r(\d+)},
 		replace => \&_createCodeReviewLink
 	};
+	my $replacerRT = {
+		match => qr{rt\ ?\#?(\d+)},
+		replace => \&_createRTLink
+	};
 	#~\br(\d+)\b
 	#	  "<a href=\"https://www.mediawiki.org" .
 	#	   "/wiki/Special:Code/MediaWiki/$1\" " .
@@ -52,6 +56,7 @@ sub bug_format_comment {
  
 	push( @$regexes, $replacerWP );
 	push( @$regexes, $replacerCR );
+	push( @$regexes, $replacerRT );
 }
 
 sub _createWikipediaLink {
@@ -63,6 +68,11 @@ sub _createWikipediaLink {
 
 sub _createCodeReviewLink {
 	my $rev_link = "<a href=\"https://www.mediawiki.org/wiki/Special:Code/MediaWiki/$1\" title=\"revision $1 in SVN\">r$1</a>";
+	return $rev_link;
+};
+
+sub _createRTLink {
+	my $rev_link = "<a href=\"https://rt.wikimedia.org/Ticket/Display.html?id=$1\" title=\"RT #$1\">RT #$1</a>";
 	return $rev_link;
 };
  
