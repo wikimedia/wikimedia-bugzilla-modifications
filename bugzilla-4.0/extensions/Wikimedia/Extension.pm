@@ -30,41 +30,40 @@ our $VERSION = '0.01';
 # See the documentation of Bugzilla::Hook ("perldoc Bugzilla::Hook" 
 # in the bugzilla directory) for a list of all available hooks.
 sub install_update_db {
-    my ($self, $args) = @_;
-
+	my ($self, $args) = @_;
 }
 
 sub bug_format_comment {
-        my ($self, $args) = @_;
-        my $regexes = $args->{'regexes'};
-        my $text = $args->{'text'};
-        my $replacerWP = {
-                match => qr{\[\[([a-zA-Z0-9_ ,./'()!#\*\$%:\x80-\xff-]+)\]\]},
-                replace => \&_createWikipediaLink
-        };
+	my ($self, $args) = @_;
+	my $regexes = $args->{'regexes'};
+	my $text = $args->{'text'};
+	my $replacerWP = {
+		match => qr{\[\[([a-zA-Z0-9_ ,./'()!#\*\$%:\x80-\xff-]+)\]\]},
+		replace => \&_createWikipediaLink
+	};
 	my $replacerCR = {
-                match => qr{r(\d+)},
-                replace => \&_createCodeReviewLink
-        };
-         #~\br(\d+)\b
-         #      "<a href=\"https://www.mediawiki.org" .
-         #       "/wiki/Special:Code/MediaWiki/$1\" " .
-         #       "title=\"revision $1 in SVN\">r$1</a>"
+		match => qr{r(\d+)},
+		replace => \&_createCodeReviewLink
+	};
+	#~\br(\d+)\b
+	#	  "<a href=\"https://www.mediawiki.org" .
+	#	   "/wiki/Special:Code/MediaWiki/$1\" " .
+	#	   "title=\"revision $1 in SVN\">r$1</a>"
  
-        push( @$regexes, $replacerWP );
+	push( @$regexes, $replacerWP );
 	push( @$regexes, $replacerCR );
 }
 
 sub _createWikipediaLink {
-        my $match_str = $1;
-        my $tmp = html_quote($match_str);
-        my $wikipedia_link = "[[<a href='https://en.wikipedia.org/w/index.php?title=Special:Search&go=Go&search=$tmp'>$tmp</a>]]";
-       return $wikipedia_link;
+	my $match_str = $1;
+	my $tmp = html_quote($match_str);
+	my $wikipedia_link = "[[<a href='https://en.wikipedia.org/w/index.php?title=Special:Search&go=Go&search=$tmp'>$tmp</a>]]";
+	return $wikipedia_link;
 };  
 
 sub _createCodeReviewLink {
-        my $rev_link = "<a href=\"https://www.mediawiki.org/wiki/Special:Code/MediaWiki/$1\" title=\"revision $1 in SVN\">r$1</a>";
-       return $rev_link;
+	my $rev_link = "<a href=\"https://www.mediawiki.org/wiki/Special:Code/MediaWiki/$1\" title=\"revision $1 in SVN\">r$1</a>";
+	return $rev_link;
 };
  
 __PACKAGE__->NAME;
