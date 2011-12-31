@@ -19,14 +19,13 @@ class BugzillaBug {
 	}
 
 	private function fromCache( ) {
-		$this->bz = self::$bugs[ $this->id ]->bz;
 		$this->data = self::$bugs[ $this->id ]->data;
 	}
 
 	public function __construct( $id, $bz, $noFetch = false ) {
 		$this->id = $id;
+		$this->bz = $bz;
 		if( !$this->inCache( ) && !$noFetch ) {
-			$this->bz = $bz;
 			$this->data = $this->bz->search( array( "id" => $id ) );
 						$this->data = $this->data['bugs'][0];
 			self::$bugs[$id] = $this;
@@ -92,7 +91,7 @@ class BugzillaBug {
 	}
 
 	public function getHistory( ) {
-		return $this->bz->__call( "Bug.history", array( "ids" => $this->id ) );
+		return $this->bz->getHistory( $this->id );
 	}
 
 	/* bz 4 reveals this info more easily */
@@ -120,7 +119,6 @@ class BugzillaBug {
 				$this->dependency[] = new BugzillaBug( $id, $this->bz );
 			}
 		}
-
 		return $this->dependency;
 	}
 }
@@ -191,7 +189,7 @@ class BugzillaWebClient {
 	}
 
 	public function getById( $id ) {
-		return new BugzillaBug( $id, $this->bz );
+		return new BugzillaBug( $id, $this );
 	}
 
 	public function getFields( ) {
@@ -208,8 +206,12 @@ class BugzillaWebClient {
 	}
 
 	public function getBugHistory( $id ) {
-		$b = $this->getById( $id );
-		return $b->getHistory();
+		return $this->getHistory( $id );
+	}
+
+	public function getHistory( $id ) {
+		/* By casting to an array this will work if $id is a single bug or a list of bugs */
+		return $this->bz->__call( "Bug.history", array( "ids" => (array)$id ) );
 	}
 
 	public function getDependencies( $id ) {
@@ -222,4 +224,3 @@ class BugzillaWebClient {
 		return $this->search(array("resolution" => $resolution, "limit" => 10));
 	}
 }
-
