@@ -121,6 +121,62 @@ class BugzillaBug {
 		}
 		return $this->dependency;
 	}
+
+	public function undoLastChangeIfBy( $email ) {
+		$hist = $this->getHistory();
+		$change = array_pop( $hist['bugs'][0]['history'] );
+		$reverse = array();
+
+		if( $change['who'] == $email ) {
+			echo "{$this->id}: Undoing last change by $email made at {$change['when']}:\n";
+			foreach($change['changes'] as $c) {
+			    $reverse = array_merge( $reverse, $this->addResetField( $c ) );
+			}
+			return $this->bz->update( $this->id, $reverse );
+		} else {
+			return false;
+		}
+	}
+
+	public function addResetField( $changeLog ) {
+		if( $this->bz->isListField( $changeLog['field_name'] ) ) {
+			return array( $changeLog['field_name'] =>
+				array( "add" => (array)$changeLog['removed'], "remove" => (array)$changeLog['added'] ) );
+		} else {
+			return array( $changeLog['field_name'] => $changeLog['removed'] );
+		}
+	}
+
+	public function resetField( $change ) {
+		if( !isset( $change['field_name'] ) )
+			throw new Exception( "no field_name given!" );
+		if( !isset( $change['removed'] ) )
+			throw new Exception( "no removed value given!" );
+		if( !isset( $change['added'] ) )
+			throw new Exception( "no added value given!" );
+
+		if( $change['removed'] == "" ) {
+			return $this->removeFromFieldList( $change['field_name'], $change['added'] );
+		}
+
+		if( $change['added'] == "" ) {
+			return $this->addToFieldList( $change['field_name'], $change['removed'] );
+		}
+
+		return $this->setFieldValue( $change['field_name'], $change['removed'] );
+	}
+
+	public function addToFieldList( $field, $value ) {
+		return $this->bz->addToFieldList( $this->id, $field, $value );
+	}
+
+	public function removeFromFieldList( $field, $value ) {
+		return $this->bz->removeFromFieldList( $this->id, $field, $value );
+	}
+
+	public function setFieldValue( $field, $value ) {
+		return $this->bz->update( $this->id, array( $field => $value ) );
+	}
 }
 
 class BugzillaSearchIterator implements Iterator {
@@ -180,12 +236,17 @@ class BugzillaSearchIterator implements Iterator {
 
 class BugzillaWebClient {
 	private $bz = null;
+	private $lists = array( "blocks", "depends_on", "cc", "groups", "keywords", "see_also" );
 
 	public function __construct( $url, $user = null, $password = null, $debug = false ) {
 		$this->bz = new jsonRPCClient( $url, $debug );
 		if($user && $password) {
 			$this->bz->__call( "User.login", array( "login" => $user, "password" => $password ) );
 		}
+	}
+
+	public function isListField( $field ) {
+		return in_array( $field, $this->lists );
 	}
 
 	public function getById( $id ) {
@@ -195,6 +256,10 @@ class BugzillaWebClient {
 	public function getFields( ) {
 		/* Weird thing we have to do to keep bz from barfing */
 		return $this->bz->__call( "Bug.fields", array( "" => "" ) );
+	}
+
+	public function getState( $id ) {
+		$this->bz->__call( "Bug.get", array( "id" => (array)$id ) );
 	}
 
 	public function search( $conditions ) {
@@ -222,5 +287,26 @@ class BugzillaWebClient {
 	public function getResolved( $resolution ) {
 		if(!is_array($resolution)) $resolution = array($resolution);
 		return $this->search(array("resolution" => $resolution, "limit" => 10));
+	}
+
+	public function addToFieldList( $ids, $field, $value ) {
+		if( !in_array( $field, $this->lists ) ) {
+			throw new Exception( "This field ($field) isn't a list!" );
+		} else {
+			return $this->update( $ids, array( $field => array( "add" => (array)$value ) ) );
+		}
+	}
+
+	public function removeFromFieldList( $ids, $field, $value ) {
+		if( !in_array( $field, $this->lists ) ) {
+			throw new Exception( "This field ($field) isn't a list!" );
+		} else {
+			return $this->update( $ids, array( $field => array( "remove" => (array)$value ) ) );
+		}
+	}
+
+	public function update( $ids, $fields ) {
+		$fields['ids'] = (array)$ids;
+		return $this->bz->__call( "Bug.update", $fields );
 	}
 }
