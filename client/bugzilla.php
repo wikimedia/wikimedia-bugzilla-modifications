@@ -27,7 +27,6 @@ class BugzillaBug {
 		$this->bz = $bz;
 		if( !$this->inCache( ) && !$noFetch ) {
 			$this->data = $this->bz->search( array( "id" => $id ) );
-						$this->data = $this->data['bugs'][0];
 			self::$bugs[$id] = $this;
 		} else if( $this->inCache( ) ){
 			$this->fromCache( );
@@ -40,6 +39,10 @@ class BugzillaBug {
 
 		$bug->data = $data;
 		return $bug;
+	}
+
+	public function getComments() {
+		return $this->bz->getBugComments( $this->id );
 	}
 
 	/**
@@ -115,7 +118,7 @@ class BugzillaBug {
 					}
 				}
 			}
-			foreach($dep as $id => $none) {
+ 			foreach($dep as $id => $none) {
 				$this->dependency[] = new BugzillaBug( $id, $this->bz );
 			}
 		}
@@ -136,6 +139,39 @@ class BugzillaBug {
 		} else {
 			return false;
 		}
+	}
+
+	public function findCommentByRegexp( $regexp ) {
+		foreach( $this->getComments() as $comment ) {
+			$hasMatch = preg_match( $regexp, $comment['text'] );
+			if( $hasMatch >= 1 ) {
+				return $comment;
+			}
+			if( $hasMatch === false ) {
+				if (preg_last_error() == PREG_INTERNAL_ERROR) {
+					print 'There is an internal error!';
+					exit;
+				}
+				else if (preg_last_error() == PREG_BACKTRACK_LIMIT_ERROR) {
+					print 'Backtrack limit was exhausted!';
+					exit;
+				}
+				else if (preg_last_error() == PREG_RECURSION_LIMIT_ERROR) {
+					print 'Recursion limit was exhausted!';
+					exit;
+				}
+				else if (preg_last_error() == PREG_BAD_UTF8_ERROR) {
+					print 'Bad UTF8 error!';
+					exit;
+				}
+				else if (preg_last_error() == PREG_BAD_UTF8_OFFSET_ERROR) {
+					print 'Bad UTF8 offset error!';
+					exit;
+				}
+			}
+		}
+
+		return null;
 	}
 
 	public function addResetField( $changeLog ) {
@@ -258,16 +294,23 @@ class BugzillaWebClient {
 		return $this->bz->__call( "Bug.fields", array( "" => "" ) );
 	}
 
-	public function getState( $id ) {
-		$this->bz->__call( "Bug.get", array( "id" => (array)$id ) );
-	}
-
 	public function search( $conditions ) {
 		if(is_array($conditions)) {
 			return $this->bz->__call( "Bug.search", $conditions );
 		} else {
 			throw new Exception("Search called without an array of conditions");
 		}
+	}
+
+	public function getBugComments( $id ) {
+		$ret = $this->bz->__call(
+			"Bug.comments", array( "ids" => (array)$id ) );
+		if( !is_array( $id ) ) {
+			$ret = $ret['bugs'][$id]['comments'];
+		} else {
+			throw new Exception("ugh!");
+		}
+		return $ret;
 	}
 
 	public function getBugHistory( $id ) {
