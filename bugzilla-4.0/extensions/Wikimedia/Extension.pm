@@ -49,7 +49,7 @@ sub bug_format_comment {
 		match => qr{rt\ ?\#?(\d+)},
 		replace => \&_createRTLink
 	};
-	my $replacerGerrit = {
+	my $replacerGR = {
 		match => qr{gerrit(\ change(set)?)?\ ?\#?(\d+)},
 		replace => \&_createGerritLink
 	}
@@ -61,7 +61,7 @@ sub bug_format_comment {
 	push( @$regexes, $replacerWP );
 	push( @$regexes, $replacerCR );
 	push( @$regexes, $replacerRT );
-	push( @$regexes, $replacerGerrit );
+	push( @$regexes, $replacerGR );
 }
 
 sub _createWikipediaLink {
