@@ -50,7 +50,7 @@ sub bug_format_comment {
 		replace => \&_createRTLink
 	};
 	my $replacerGR = {
-		match => qr{gerrit(\ change(set)?)?\ ?\#?(\d+)},
+		match => qr{gerrit\ ?\#?(\d+)},
 		replace => \&_createGerritLink
 	}
 	#~\br(\d+)\b
@@ -82,7 +82,7 @@ sub _createRTLink {
 };
 
 sub _createGerritLink {
-	my $rev_link = "<a href=\"https://gerrit.wikimedia.org/r/#change,$3\" title=\"Gerrit change #$3\">Gerrit change #$3</a>";
+	my $rev_link = "<a href=\"https://gerrit.wikimedia.org/r/#change,$1\" title=\"Gerrit change #$1\">Gerrit change #$1</a>";
 	return $rev_link;
 };
  
