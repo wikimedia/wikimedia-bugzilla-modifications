@@ -49,10 +49,10 @@ sub bug_format_comment {
 		match => qr{rt\ ?\#?(\d+)},
 		replace => \&_createRTLink
 	};
-	my $replacerGR = {
-		match => qr{gerrit\ ?\#?(\d+)},
+	my $replacerGerrit = {
+		match => qr{gerrit(\ change(set)?)?\ ?\#?(\d+)},
 		replace => \&_createGerritLink
-	}
+	};
 	#~\br(\d+)\b
 	#	  "<a href=\"https://www.mediawiki.org" .
 	#	   "/wiki/Special:Code/MediaWiki/$1\" " .
@@ -61,7 +61,7 @@ sub bug_format_comment {
 	push( @$regexes, $replacerWP );
 	push( @$regexes, $replacerCR );
 	push( @$regexes, $replacerRT );
-	push( @$regexes, $replacerGR );
+	push( @$regexes, $replacerGerrit );
 }
 
 sub _createWikipediaLink {
@@ -82,7 +82,7 @@ sub _createRTLink {
 };
 
 sub _createGerritLink {
-	my $rev_link = "<a href=\"https://gerrit.wikimedia.org/r/#change,$1\" title=\"Gerrit change #$1\">Gerrit change #$1</a>";
+	my $rev_link = "<a href=\"https://gerrit.wikimedia.org/r/#change,$3\" title=\"Gerrit change #$3\">Gerrit change #$3</a>";
 	return $rev_link;
 };
  
