@@ -42,15 +42,15 @@ sub bug_format_comment {
 		replace => \&_createWikipediaLink
 	};
 	my $replacerCR = {
-		match => qr{r(\d+)},
+		match => qr{\br(\d+)},
 		replace => \&_createCodeReviewLink
 	};
 	my $replacerRT = {
-		match => qr{rt\ ?\#?(\d+)},
+		match => qr{\brt\ ?\#?(\d+)}i,
 		replace => \&_createRTLink
 	};
 	my $replacerGerrit = {
-		match => qr{gerrit(\ change(set)?)?\ ?\#?(\d+)},
+		match => qr{\bgerrit(\ change(set)?)?\ ?\#?(\d+)}i,
 		replace => \&_createGerritLink
 	};
 	#~\br(\d+)\b
