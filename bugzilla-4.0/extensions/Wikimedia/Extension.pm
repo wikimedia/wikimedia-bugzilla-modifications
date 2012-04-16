@@ -53,11 +53,7 @@ sub bug_format_comment {
 		match => qr{\bgerrit(\ change(set)?)?\ ?\#?(\d+)}i,
 		replace => \&_createGerritLink
 	};
-	#~\br(\d+)\b
-	#	  "<a href=\"https://www.mediawiki.org" .
-	#	   "/wiki/Special:Code/MediaWiki/$1\" " .
-	#	   "title=\"revision $1 in SVN\">r$1</a>"
- 
+
 	push( @$regexes, $replacerWP );
 	push( @$regexes, $replacerCR );
 	push( @$regexes, $replacerRT );
@@ -69,7 +65,7 @@ sub _createWikipediaLink {
 	my $tmp = html_quote($match_str);
 	my $wikipedia_link = "[[<a href='https://en.wikipedia.org/w/index.php?title=Special:Search&go=Go&search=$tmp'>$tmp</a>]]";
 	return $wikipedia_link;
-};  
+};
 
 sub _createCodeReviewLink {
 	my $rev_link = "<a href=\"https://www.mediawiki.org/wiki/Special:Code/MediaWiki/$1\" title=\"revision $1 in SVN\">r$1</a>";
