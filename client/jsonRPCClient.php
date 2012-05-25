@@ -115,10 +115,8 @@ class jsonRPCClient {
 		// performs the HTTP POST
 		$h = MWHttpRequest::factory($this->url, array('method' => "POST", 'postData' => $request));
 		$h->setHeader('Content-Type', "application/json");
-		if(!$this->cookieJar) $this->cookieJar = $h->getCookieJar();
-		$h->setCookieJar($this->cookieJar);
-		$status = $h->execute();
-		$this->cookieJar = $h->getCookieJar();
+
+		$status = $this->executeWithCookies( $h );
 
 		$response = $h->getContent();
 
@@ -155,5 +153,13 @@ class jsonRPCClient {
 		} else {
 			return true;
 		}
+	}
+
+	public function executeWithCookies( $handle ) {
+		if(!$this->cookieJar) $this->cookieJar = $handle->getCookieJar();
+		$handle->setCookieJar($this->cookieJar);
+		$status = $handle->execute();
+		$this->cookieJar = $handle->getCookieJar();
+		return $status;
 	}
 }

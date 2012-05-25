@@ -41,6 +41,14 @@ class BugzillaBug {
 		return $bug;
 	}
 
+	public function getPatches() {
+		var_dump( $this->id );exit;
+	}
+
+	public function getAttachments() {
+		return $this->bz->getBugAttachments( $this->id );
+	}
+
 	public function getComments() {
 		return $this->bz->getBugComments( $this->id );
 	}
@@ -118,14 +126,14 @@ class BugzillaBug {
 					}
 				}
 			}
- 			foreach($dep as $id => $none) {
+			foreach($dep as $id => $none) {
 				$this->dependency[] = new BugzillaBug( $id, $this->bz );
 			}
 		}
 		return $this->dependency;
 	}
 
-	public function undoLastChangeIfBy( $email ) {
+	public function undoLastChangeIfBy( $email, $fakeIt = "" ) {
 		$hist = $this->getHistory();
 		$change = array_pop( $hist['bugs'][0]['history'] );
 		$reverse = array();
@@ -133,9 +141,13 @@ class BugzillaBug {
 		if( $change['who'] == $email ) {
 			echo "{$this->id}: Undoing last change by $email made at {$change['when']}:\n";
 			foreach($change['changes'] as $c) {
-			    $reverse = array_merge( $reverse, $this->addResetField( $c ) );
+				$reverse = array_merge( $reverse, $this->addResetField( $c ) );
 			}
-			return $this->bz->update( $this->id, $reverse );
+			if( $fakeIt === "" ) {
+				return $this->bz->update( $this->id, $reverse );
+			} else {
+				var_dump($reverse);
+			}
 		} else {
 			return false;
 		}
@@ -174,12 +186,30 @@ class BugzillaBug {
 		return null;
 	}
 
+	public function deleteComment( $id ) {
+		return $this->bz->deleteComment( $this->id, $id );
+	}
+
 	public function addResetField( $changeLog ) {
 		if( $this->bz->isListField( $changeLog['field_name'] ) ) {
-			return array( $changeLog['field_name'] =>
-				array( "add" => (array)$changeLog['removed'], "remove" => (array)$changeLog['added'] ) );
+			$add    = explode( ", ", $changeLog['removed'] );
+			$remove = explode( ", ", $changeLog['added'] );
+
+			if( $add[0] !== "" ) {
+				$changes["add"] = $add;
+			}
+			if( $remove[0] !== "" ) {
+				$changes['remove'] = $remove;
+			}
+
+			return array( $changeLog['field_name'] => $changes );
 		} else {
-			return array( $changeLog['field_name'] => $changeLog['removed'] );
+			$v = $changeLog['removed'];
+			$f = $changeLog['field_name'];
+			if( $f === "bug_status" && ( $v === "NEW" || $v === "ASSIGNED" ) ) {
+				$v = "REOPENED";
+			}
+			return array( $f => $v );
 		}
 	}
 
@@ -242,7 +272,7 @@ class BugzillaSearchIterator implements Iterator {
 			}
 
 			foreach($results['bugs'] as $bug) {
-				$this->data[] = BugzillaBug::newFromQuery($this->bz, $bug);
+				$this->data[] = BugzillaBug::newFromQuery( $this->bz, $bug );
 			}
 		}
 	}
@@ -270,6 +300,27 @@ class BugzillaSearchIterator implements Iterator {
 	}
 }
 
+class BugzillaPatchIterator extends BugzillaSearchIterator {
+	private function fetchNext( ) {
+		if( $this->offset == count( $this->data ) && !$this->eol && $this->offset % $this->limit === 0 ) {
+			$results = $this->bz->search( $this->conditions );
+
+			$this->conditions['offset'] += $this->limit;
+
+			if( count( $results['bugs'] ) < $this->limit ) {
+				$this->eol = true;
+			}
+
+			foreach($results['bugs'] as $bug) {
+				$check = BugzillaBug::newFromQuery($this->bz, $bug);
+				foreach( $check->getPatches( $this->conditions[ 'last_change_time' ] ) as $patch) {
+					$this->data[] = $patch;
+				}
+			}
+		}
+	}
+}
+
 class BugzillaWebClient {
 	private $bz = null;
 	private $lists = array( "blocks", "depends_on", "cc", "groups", "keywords", "see_also" );
@@ -279,6 +330,12 @@ class BugzillaWebClient {
 		if($user && $password) {
 			$this->bz->__call( "User.login", array( "login" => $user, "password" => $password ) );
 		}
+	}
+
+	public function deleteComment( $bugId, $id ) {
+		$url = sprintf( "https://bugzilla.wikimedia.org/deletecomment.cgi?bug_id=%d&id=%d", $bugId, $id );
+		$h = MWHttpRequest::factory( $url );
+		return $this->bz->executeWithCookies( $h );
 	}
 
 	public function isListField( $field ) {
@@ -302,13 +359,26 @@ class BugzillaWebClient {
 		}
 	}
 
+	public function getBugAttachments( $id, $attachments = null ) {
+		$args['ids'] = (array)$id;
+		if ( $attachments !== null ) {
+			$args['attachment_ids'] = (array)$attachments;
+		}
+		$ret = $this->bz->__call(
+			"Bug.comments", $args );
+
+		if( !is_array( $id ) ) {
+			$ret = $ret['bugs'][$id];
+		}
+
+		return $ret;
+	}
+
 	public function getBugComments( $id ) {
 		$ret = $this->bz->__call(
 			"Bug.comments", array( "ids" => (array)$id ) );
 		if( !is_array( $id ) ) {
 			$ret = $ret['bugs'][$id]['comments'];
-		} else {
-			throw new Exception("ugh!");
 		}
 		return $ret;
 	}
