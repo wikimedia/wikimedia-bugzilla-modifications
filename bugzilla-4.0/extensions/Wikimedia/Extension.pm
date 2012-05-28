@@ -92,7 +92,7 @@ sub _createGerritChangesetLink {
 	return $rev_link;
 };
 
-sub _createGerritChangesetLink {
+sub _createGerritChangeidLink {
 	my $rev_link = "<a href=\"https://gerrit.wikimedia.org/r/#q,$1,n,z\" title=\"Gerrit Change-Id: $1\">$1</a>";
 	return $rev_link;
 };
