@@ -49,15 +49,25 @@ sub bug_format_comment {
 		match => qr{\brt\ ?\#?(\d+)}i,
 		replace => \&_createRTLink
 	};
-	my $replacerGerrit = {
+	my $replacerGerritChangeset = {
 		match => qr{\bgerrit(\ change(set)?)?\ ?\#?(\d+)}i,
-		replace => \&_createGerritLink
+		replace => \&_createGerritChangesetLink
+	};
+	my $replacerGerritChangeId = {
+		match => qr{\b(I[0-9a-f]{8,40})}i,
+		replace => \&_createGerritChangeidLink
+	};
+	my $replacerGitCommit = {
+		match => qr{\b([a-f0-9]{40})}i,
+		replace => \&_createGitCommitLink
 	};
 
 	push( @$regexes, $replacerWP );
 	push( @$regexes, $replacerCR );
 	push( @$regexes, $replacerRT );
-	push( @$regexes, $replacerGerrit );
+	push( @$regexes, $replacerGerritChangeset );
+	push( @$regexes, $replacerGerritChangeId );
+	push( @$regexes, $replacerGitCommit );
 }
 
 sub _createWikipediaLink {
@@ -77,8 +87,18 @@ sub _createRTLink {
 	return $rev_link;
 };
 
-sub _createGerritLink {
-	my $rev_link = "<a href=\"https://gerrit.wikimedia.org/r/#change,$3\" title=\"Gerrit change #$3\">Gerrit change #$3</a>";
+sub _createGerritChangesetLink {
+	my $rev_link = "<a href=\"https://gerrit.wikimedia.org/r/$3\" title=\"Gerrit change #$3\">Gerrit change #$3</a>";
+	return $rev_link;
+};
+
+sub _createGerritChangesetLink {
+	my $rev_link = "<a href=\"https://gerrit.wikimedia.org/r/#q,$1,n,z\" title=\"Gerrit Change-Id: $1\">$1</a>";
+	return $rev_link;
+};
+
+sub _createGitCommitLink {
+	my $rev_link = "<a href=\"https://gerrit.wikimedia.org/r/#q,$1,n,z\" title=\"Git commit $1\">$1</a>";
 	return $rev_link;
 };
  
