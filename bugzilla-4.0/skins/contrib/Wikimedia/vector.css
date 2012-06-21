@@ -406,6 +406,7 @@ pre {
 	color: black;
 	background-color: #f9f9f9;
 	line-height: 1.1em;
+	word-wrap: break-word;
 }
 tbody.file pre {
      padding: 0;
