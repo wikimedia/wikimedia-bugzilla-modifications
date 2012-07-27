@@ -42,7 +42,7 @@ class BugzillaBug {
 	}
 
 	public function getPatches() {
-		var_dump( $this->id );exit;
+		var_dump( $this->getAttachments() );exit;
 	}
 
 	public function getAttachments() {
@@ -248,12 +248,12 @@ class BugzillaBug {
 }
 
 class BugzillaSearchIterator implements Iterator {
-	private $conditions;
-	private $bz;
-	private $data = array();
-	private $limit = 20;
-	private $offset = 0;
-	private $eol = false;
+	protected $conditions;
+	protected $bz;
+	protected $data = array();
+	protected $limit = 20;
+	protected $offset = 0;
+	protected $eol = false;
 
 	public function __construct( $bz, $conditions ) {
 		$this->bz = $bz;
@@ -263,7 +263,12 @@ class BugzillaSearchIterator implements Iterator {
 		if( !isset( $this->conditions['offset'] ) ) $this->conditions['offset'] = $this->offset;
 	}
 
-	private function fetchNext( ) {
+	/* Override this for other iterators  */
+	public function getItem( $bug ) {
+		return BugzillaBug::newFromQuery($this->bz, $bug);
+	}
+
+	protected function fetchNext( ) {
 		if( $this->offset == count( $this->data ) && !$this->eol && $this->offset % $this->limit === 0 ) {
 			$results = $this->bz->search( $this->conditions );
 
@@ -274,7 +279,10 @@ class BugzillaSearchIterator implements Iterator {
 			}
 
 			foreach($results['bugs'] as $bug) {
-				$this->data[] = BugzillaBug::newFromQuery( $this->bz, $bug );
+				$val = $this->getItem( $bug );
+				if( $val ) {
+					$this->data[] = $val;
+				}
 			}
 		}
 	}
@@ -299,27 +307,6 @@ class BugzillaSearchIterator implements Iterator {
 	public function valid ( ) {
 		$this->fetchNext();
 		return isset( $this->data[ $this->offset ] );
-	}
-}
-
-class BugzillaPatchIterator extends BugzillaSearchIterator {
-	private function fetchNext( ) {
-		if( $this->offset == count( $this->data ) && !$this->eol && $this->offset % $this->limit === 0 ) {
-			$results = $this->bz->search( $this->conditions );
-
-			$this->conditions['offset'] += $this->limit;
-
-			if( count( $results['bugs'] ) < $this->limit ) {
-				$this->eol = true;
-			}
-
-			foreach($results['bugs'] as $bug) {
-				$check = BugzillaBug::newFromQuery($this->bz, $bug);
-				foreach( $check->getPatches( $this->conditions[ 'last_change_time' ] ) as $patch) {
-					$this->data[] = $patch;
-				}
-			}
-		}
 	}
 }
 
