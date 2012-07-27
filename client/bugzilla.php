@@ -259,8 +259,8 @@ class BugzillaSearchIterator implements Iterator {
 		$this->bz = $bz;
 		$this->conditions = $conditions;
 
-		$this->conditions['limit'] = $this->limit;
-		$this->conditions['offset'] = $this->offset;
+		if( !isset( $this->conditions['limit'] ) )  $this->conditions['limit'] = $this->limit;
+		if( !isset( $this->conditions['offset'] ) ) $this->conditions['offset'] = $this->offset;
 	}
 
 	private function fetchNext( ) {
