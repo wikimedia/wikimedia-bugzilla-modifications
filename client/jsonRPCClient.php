@@ -113,7 +113,6 @@ class jsonRPCClient {
 		$this->debug && $this->debug='***** Request *****'."\n".$request."\n".'***** End Of request *****'."\n\n";
 
 		// performs the HTTP POST
-		Http::$httpEngine = 'php';
 		$h = MWHttpRequest::factory($this->url, array('method' => "POST", 'postData' => $request));
 		$h->setHeader('Content-Type', "application/json");
 
