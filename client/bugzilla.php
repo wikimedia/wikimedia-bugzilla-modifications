@@ -102,7 +102,9 @@ class BugzillaBug {
 	}
 
 	public function getHistory( ) {
-		return $this->bz->getHistory( $this->id );
+		$ret = $this->bz->getHistory( $this->id );
+
+		return $ret['bugs'][0]['history'];
 	}
 
 	/* bz 4 reveals this info more easily */

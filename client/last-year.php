@@ -2,7 +2,7 @@
 <?php
 
 define('MEDIAWIKI', true);
-$IP = "/home/mah/work/code/mediawiki/mw-svn"; # root of your mw installation ... we use the HTTPClient class
+$IP = "/home/mah/work/code/mediawiki/core"; # root of your mw installation ... we use the HTTPClient class
 
 require_once 'bugzilla.php';
 $u = parse_ini_file(getenv('HOME')."/.bugzilla.ini");
@@ -27,4 +27,3 @@ foreach( $iter as $bug ) {
 		}
 	}
 }
-
