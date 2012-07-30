@@ -42,7 +42,22 @@ class BugzillaBug {
 	}
 
 	public function getPatches() {
-		var_dump( $this->getAttachments() );exit;
+		$ret = array();
+		foreach( $this->getAttachments() as $attachment ) {
+			if( $attachment['content_type'] == "text/diff"
+				|| substr( strtolower( $attachment['file_name'] ), -4 ) == "diff"
+				|| substr( strtolower( $attachment['file_name'] ), -7 ) == "diff.gz"
+				|| substr( strtolower( $attachment['file_name'] ), -8 ) == "patch.gz"
+				|| substr( strtolower( $attachment['file_name'] ), -5 ) == "patch" ) {
+				$ret[] = $attachment;
+			} else {
+				/* echo $attachment['content_type'], "\n"; */
+				/* echo $attachment['file_name'], "\n"; */
+				/* echo substr( strtolower( $attachment['file_name'] ), -6 ). "\n"; */
+			}
+		}
+
+		return $ret;
 	}
 
 	public function getAttachments() {
@@ -147,8 +162,6 @@ class BugzillaBug {
 			}
 			if( $fakeIt === "" ) {
 				return $this->bz->update( $this->id, $reverse );
-			} else {
-				var_dump($reverse);
 			}
 		} else {
 			return false;
@@ -273,7 +286,6 @@ class BugzillaSearchIterator implements Iterator {
 			$results = $this->bz->search( $this->conditions );
 
 			$this->conditions['offset'] += $this->limit;
-
 			if( count( $results['bugs'] ) < $this->limit ) {
 				$this->eol = true;
 			}
@@ -305,7 +317,9 @@ class BugzillaSearchIterator implements Iterator {
 	}
 
 	public function valid ( ) {
-		$this->fetchNext();
+		while( !$this->eol && !isset($this->data[$this->offset]) ) {
+			$this->fetchNext();
+		}
 		return isset( $this->data[ $this->offset ] );
 	}
 }
@@ -354,7 +368,7 @@ class BugzillaWebClient {
 			$args['attachment_ids'] = (array)$attachments;
 		}
 		$ret = $this->bz->__call(
-			"Bug.comments", $args );
+			"Bug.attachments", $args );
 
 		if( !is_array( $id ) ) {
 			$ret = $ret['bugs'][$id];
