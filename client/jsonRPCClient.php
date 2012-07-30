@@ -35,7 +35,8 @@ class jsonRPCClient {
 	 *
 	 * @var boolean
 	 */
-	private $debug = false;
+	private $print_debug = false;
+	private $debug = "";
 
 	/**
 	 * The server URL
@@ -70,7 +71,9 @@ class jsonRPCClient {
 		// proxy
 		empty($proxy) ? $this->proxy = '' : $this->proxy = $proxy;
 		// debug state
-		if($debug) $this->debug = true;
+		if( $debug === true || $debug === "true" || $debug == 1 ) { /* last check has only == to allow strings */
+			$this->print_debug = true;
+		}
 		// message id
 		$this->id = 1;
 	}
@@ -110,7 +113,9 @@ class jsonRPCClient {
 			$request['params'] = $params;
 		}
 		$request = json_encode($request);
-		$this->debug && $this->debug='***** Request *****'."\n".$request."\n".'***** End Of request *****'."\n\n";
+		if ($this->print_debug) {
+			$this->debug='***** Request *****'."\n".$request."\n".'***** End Of request *****'."\n\n";
+		}
 
 		// performs the HTTP POST
 		$h = MWHttpRequest::factory($this->url, array('method' => "POST", 'postData' => $request));
@@ -121,7 +126,9 @@ class jsonRPCClient {
 		$response = $h->getContent();
 
 		if ( $status->isOk() ) {
-			$this->debug && $this->debug.='***** Server response *****'."\n".$response.'***** End of server response *****'."\n";
+			if( $this->print_debug ) {
+				$this->debug.='***** Server response *****'."\n".$response.'***** End of server response *****'."\n";
+			}
 			$response = json_decode($response,true);
 		} else {
 			throw new Exception(html_entity_decode(preg_replace("#<[^<>]*>#", "", $h->getContent())));
