@@ -7,6 +7,9 @@ require_once "$IP/includes/GlobalFunctions.php";
 require_once "$IP/includes/DefaultSettings.php";
 require_once 'jsonRPCClient.php';
 
+// Relevant documentation
+// http://www.bugzilla.org/docs/tip/en/html/api/Bugzilla/WebService/Bug.html
+
 class BugzillaBug {
 	static private $bugs;
 	private $bz = null;
@@ -32,7 +35,6 @@ class BugzillaBug {
 			$this->fromCache( );
 		}
 	}
-
 
 	static public function newFromQuery( $bz, $data ) {
 		$bug = new BugzillaBug( $data['id'], $bz, true );
