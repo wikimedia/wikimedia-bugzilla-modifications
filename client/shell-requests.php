@@ -30,30 +30,33 @@ $queries = array(
 	array(
 		'Query Title' => 'All currently open shell bugs',
 		'status' => array( 'UNCONFIRMED', 'NEW', 'ASSIGNED', 'REOPENED' ),
-		'keywords' => array( 'shell' ),
+		// 'keywords' => array( 'shell' ), // Currently no search by keyword support
 	),
 	// https://bugzilla.wikimedia.org/buglist.cgi?keywords=shell&query_format=advanced&keywords_type=allwords&list_id=80453&bug_status=RESOLVED&bug_status=VERIFIED&bug_status=CLOSED&known_name=Shell%3A%20All%20Open%20Requests
 	array(
 		'Query Title' => 'All closed/resolved/verified shell bugs',
 		'status' => array( 'CLOSED', 'RESOLVED', 'VERIFIED' ),
-		'keywords' => array( 'shell' ),
+		// 'keywords' => array( 'shell' ), // Currently no search by keyword support
 	),
 	// https://bugzilla.wikimedia.org/buglist.cgi?keywords=shell&query_format=advanced&keywords_type=allwords&list_id=80456&bug_status=RESOLVED&bug_status=VERIFIED&bug_status=CLOSED&resolution=FIXED
 	array(
-		'Query Title' => 'All closed/resolved/verified shell bugs',
-		'status' => array( 'CLOSED', 'RESOLVED', 'VERIFIED' ),
-		'keywords' => array( 'shell' ),
-	),
-	// https://bugzilla.wikimedia.org/buglist.cgi?chfieldto=2012-07-30&keywords=shell&chfield=bug_status&query_format=advanced&keywords_type=allwords&chfieldfrom=2012-07-01&list_id=85568&bug_status=RESOLVED&bug_status=VERIFIED&bug_status=CLOSED
-	array(
-	'Query Title' => 'All closed/resolved/verified shell bugs from last month',
+		'Query Title' => 'All closed/resolved/verified fixed shell bugs',
 		'status' => array( 'CLOSED', 'RESOLVED', 'VERIFIED' ),
 		'resolution' => array( 'FIXED' ),
-		'keywords' => array( 'shell' ),
-		// 'changedafter' => '2012-07-01',
-		// 'changedbefore' => '2012-07-30',
+		// 'keywords' => array( 'shell' ), // Currently no search by keyword support
 	),
 );
+
+$now = new DateTime( 'now' );
+// https://bugzilla.wikimedia.org/buglist.cgi?chfieldto=2012-07-30&keywords=shell&chfield=bug_status&query_format=advanced&keywords_type=allwords&chfieldfrom=2012-07-01&list_id=85568&bug_status=RESOLVED&bug_status=VERIFIED&bug_status=CLOSED
+$queries[] = array(
+	'Query Title' => 'All closed/resolved/verified shell bugs from last month',
+	'status' => array( 'CLOSED', 'RESOLVED', 'VERIFIED' ),
+	'resolution' => array( 'FIXED' ),
+	// 'keywords' => array( 'shell' ), // Currently no search by keyword support
+	'last_change_time' => $now->modify( 'first day of last month' )->format( 'Y-m-d' ), // Searches for bugs that were modified at this time or later.
+	// 'chfieldto' => $now->modify( 'last day of this month' )->format( 'Y-m-d' ),
+),
 
 # iterate over a list of patches
 foreach( $queries as $terms ) {
