@@ -61,9 +61,9 @@ $queries = array(
 	array(
 		'Query Title' => "New, as-yet-unresolved bugs against MW Core since $time",
 		'creation_time' => $time,
-		"product" => array( "MediaWiki" ),
-        "resolution" => array("")
-	)
+		'product' => array( 'MediaWiki' ),
+		'resolution' => array( '' )
+	),
 );
 
 
