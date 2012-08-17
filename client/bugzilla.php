@@ -28,7 +28,7 @@ class BugzillaBug {
 		if( !$this->inCache( ) && !$noFetch ) {
 			$this->data = $this->bz->search( array( "id" => $id ) );
 			self::$bugs[$id] = $this;
-		} else if( $this->inCache( ) ){
+		} elseif( $this->inCache( ) ){
 			$this->fromCache( );
 		}
 	}
@@ -179,19 +179,19 @@ class BugzillaBug {
 					print 'There is an internal error!';
 					exit;
 				}
-				else if (preg_last_error() == PREG_BACKTRACK_LIMIT_ERROR) {
+				elseif (preg_last_error() == PREG_BACKTRACK_LIMIT_ERROR) {
 					print 'Backtrack limit was exhausted!';
 					exit;
 				}
-				else if (preg_last_error() == PREG_RECURSION_LIMIT_ERROR) {
+				elseif (preg_last_error() == PREG_RECURSION_LIMIT_ERROR) {
 					print 'Recursion limit was exhausted!';
 					exit;
 				}
-				else if (preg_last_error() == PREG_BAD_UTF8_ERROR) {
+				elseif (preg_last_error() == PREG_BAD_UTF8_ERROR) {
 					print 'Bad UTF8 error!';
 					exit;
 				}
-				else if (preg_last_error() == PREG_BAD_UTF8_OFFSET_ERROR) {
+				elseif (preg_last_error() == PREG_BAD_UTF8_OFFSET_ERROR) {
 					print 'Bad UTF8 offset error!';
 					exit;
 				}
