@@ -56,7 +56,7 @@ $queries[] = array(
 	// 'keywords' => array( 'shell' ), // Currently no search by keyword support
 	'last_change_time' => $now->modify( 'first day of last month' )->format( 'Y-m-d' ), // Searches for bugs that were modified at this time or later.
 	// 'chfieldto' => $now->modify( 'last day of this month' )->format( 'Y-m-d' ),
-),
+);
 
 # iterate over a list of patches
 foreach( $queries as $terms ) {
