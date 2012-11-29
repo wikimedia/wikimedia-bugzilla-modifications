@@ -50,7 +50,7 @@ sub bug_format_comment {
 		replace => \&_createRTLink
 	};
 	my $replacerGerritChangeset = {
-		match => qr{\bgerrit(\ change(set)?)?\ ?\#?(\d+)}i,
+		match => qr{\bgerrit(\ change(set)?)?\ ?\#?(\d{2,})}i,
 		replace => \&_createGerritChangesetLink
 	};
 	my $replacerGerritChangeId = {
