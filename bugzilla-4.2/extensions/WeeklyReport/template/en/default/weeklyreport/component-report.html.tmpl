@@ -1,0 +1,33 @@
+[%# KDE component report template  #%]
+
+[% PROCESS global/variables.none.tmpl %]
+
+[% PROCESS global/header.html.tmpl
+   title = "Component Report"
+   h1 = "Report Count by Component and Severity"
+%]
+
+<p align="center">
+<table border="1" cellspacing="2" cellpadding="5" align="center">
+<tr style="background-color: #EEF6FF;">
+<td><b>Component</b></td>
+[% FOREACH sev = all_severities %]
+<td><b>[% sev %]</b></td>
+[% END %]
+<td><b>total</b></td>
+</tr>
+[% FOREACH comp = all_components %]
+<tr>
+    <td>[% product %] - [% comp %]</td>
+    [% FOREACH sev = all_severities %]
+        <td><a href="buglist.cgi?product=[% product %]&amp;component=[% comp %]&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED&amp;bug_severity=[% sev %]">[% bug_sev_counts.$comp.$sev %]</a></td>
+    [% END %]
+    <td><a href="buglist.cgi?product=[% product %]&amp;component=[% comp %]&amp;bug_status=UNCONFIRMED&amp;bug_status=NEW&amp;bug_status=ASSIGNED&amp;bug_status=REOPENED">[% bug_sev_counts.$comp.total %]</a></td>
+</tr>
+[% END %]
+
+
+</table>
+</p>
+[% PROCESS global/footer.html.tmpl %]
+
