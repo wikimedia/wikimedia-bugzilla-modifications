@@ -49,16 +49,22 @@ sub bug_format_comment {
 		match => qr{\brt\ ?\#?(\d+)}i,
 		replace => \&_createRTLink
 	};
+# Testcase: Gerrit 2.5
+# seen in: Summary of https://bugzilla.wikimedia.org/show_bug.cgi?id=41321
 	my $replacerGerritChangeset = {
 		match => qr{\bgerrit(\ change(set)?)?\ ?\#?(\d+)}i,
 		replace => \&_createGerritChangesetLink
 	};
+# Testcase: https://gerrit.wikimedia.org/r/#q,I0d6c654a7354ba77e65e338423952a6a78c1150f,n,z
+# seen in: https://bugzilla.wikimedia.org/show_bug.cgi?id=18195#c14
 	my $replacerGerritChangeId = {
-		match => qr{\b(I[0-9a-f]{8,40})}i,
+		match => qr{(?:^|(?<=\s))(I[0-9a-f]{8,40})}i,
 		replace => \&_createGerritChangeidLink
 	};
+# Testcase: https://gerrit.wikimedia.org/r/gitweb?p=operations/mediawiki-config.git;a=blob;f=wmf-config/CommonSettings.php;h=954509678eeb4c1079fb7addfa189001671c6671;hb=HEAD#l1530
+# seen in: https://bugzilla.wikimedia.org/show_bug.cgi?id=41745#c5
 	my $replacerGitCommit = {
-		match => qr{\b([a-f0-9]{40})}i,
+		match => qr{(?:^|(?<=\s))([a-f0-9]{40})}i,
 		replace => \&_createGitCommitLink
 	};
 
