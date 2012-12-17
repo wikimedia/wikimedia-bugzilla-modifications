@@ -52,7 +52,7 @@ sub bug_format_comment {
 # Testcase: Gerrit 2.5
 # seen in: Summary of https://bugzilla.wikimedia.org/show_bug.cgi?id=41321
 	my $replacerGerritChangeset = {
-		match => qr{\bgerrit(\ change(set)?)?\ ?\#?(\d+)}i,
+		match => qr{\bgerrit(\ change(set)?)?\ ?\#?(\d{2,})}i,
 		replace => \&_createGerritChangesetLink
 	};
 # Testcase: https://gerrit.wikimedia.org/r/#q,I0d6c654a7354ba77e65e338423952a6a78c1150f,n,z
