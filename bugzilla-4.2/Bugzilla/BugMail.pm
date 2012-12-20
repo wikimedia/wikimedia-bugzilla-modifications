@@ -109,8 +109,7 @@ sub relationships {
 # All the names are email addresses, not userids
 # values are scalars, except for cc, which is a list
 sub Send {
-    my ($id, $forced, $params) = (@_);
-    $params ||= {};
+    my ($id, $forced) = (@_);
 
     my $dbh = Bugzilla->dbh;
     my $bug = new Bugzilla::Bug($id);
@@ -369,7 +368,10 @@ sub Send {
     foreach (@watchers) {
         my $watcher_id = login_to_id($_);
         next unless $watcher_id;
-        $recipients{$watcher_id}->{+REL_GLOBAL_WATCHER} = BIT_DIRECT;
+        #$recipients{$watcher_id}->{+REL_GLOBAL_WATCHER} = BIT_DIRECT;
+        # Wikimedia Hack! Pretend global watchers are CCs so we can use their prefs
+        # to for instance ignore CC-only mails.
+        $recipients{$watcher_id}->{+REL_CC} = BIT_DIRECT;
     }
 
     # We now have a complete set of all the users, and their relationships to
@@ -377,11 +379,6 @@ sub Send {
     # all - there are preferences, permissions checks and all sorts to do yet.
     my @sent;
     my @excluded;
-
-    # The email client will display the Date: header in the desired timezone,
-    # so we can always use UTC here.
-    my $date = $params->{dep_only} ? $end : $bug->delta_ts;
-    $date = format_time($date, '%a, %d %b %Y %T %z', 'UTC');
 
     foreach my $user_id (keys %recipients) {
         my %rels_which_want;
@@ -434,7 +431,6 @@ sub Send {
                       bug      => $bug,
                       comments => $comments,
                       is_new   => !$start,
-                      date     => $date,
                       changer  => $changer,
                       watchers => exists $watching{$user_id} ?
                                   $watching{$user_id} : undef,
@@ -468,7 +464,6 @@ sub sendMail {
     my $bug    = $params->{bug};
     my @send_comments = @{ $params->{comments} };
     my $isnew   = $params->{is_new};
-    my $date    = $params->{date};
     my $changer = $params->{changer};
     my $watchingRef = $params->{watchers};
     my @diffparts   = @{ $params->{diff_parts} };
@@ -569,7 +564,6 @@ sub sendMail {
 
     my $vars = {
         isnew => $isnew,
-        date => $date,
         to_user => $user,
         bug => $bug,
         changedfields => \@changed_fields,
