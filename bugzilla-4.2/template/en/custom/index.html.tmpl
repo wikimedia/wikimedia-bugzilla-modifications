@@ -30,7 +30,7 @@
 
 
 [% PROCESS global/header.html.tmpl
-   title = "$terms.Bugzilla Main Page"
+   title = "Wikimedia $terms.Bugzilla Main Page"
    header = "Main Page" 
 %]
 
@@ -38,52 +38,59 @@
 
 <div id="page-index">
   [% IF user.settings.skin.value=='Wikimedia' %]
-  <div class="intro">
-    <img src="skins/contrib/Wikimedia/bugzilla-ayb.png" width="308" height="236" border="2" alt="bugzzz"/>
+  <div class="intro">[% Hook.process('intro') %]
   </div>
   [% END %]
 
-  <p>This is the bug tracker for <a
-href="http://www.mediawiki.org/">MediaWiki</a> and its extensions
+  <h1 id="welcome"> Welcome to MediaWiki [% terms.Bugzilla %]</h1>
+  <p style="text-align:center;">This is the bug tracker for <a
+href="https://www.mediawiki.org/">MediaWiki</a> and its extensions
 and site-specific problems on <a
-href="http://www.wikimedia.org/">Wikimedia's</a> wiki sites.</p>
+href="https://www.wikimedia.org/">Wikimedia</a> wikis.</p>
 
-  <p>Welcome to [% terms.Bugzilla %]. To see what's new in this version
-    of [% terms.Bugzilla %], see the 
-    <a href="page.cgi?id=release-notes.html">release notes</a>!
-    You may also want to read the 
-    <a href="[% Param('docs_urlbase') FILTER html %]using.html">
-    [%- terms.Bugzilla %] User's Guide</a> to find out more about 
-    [%+ terms.Bugzilla %] and how to use it.</p>
+  <p style="text-align:center;"><b>If you would like to file a bug report, please read
+     <a href="http://www.mediawiki.org/wiki/How_to_report_a_bug"><i>How
+to report a bug</i></a> for some pointers.</b></p>
 
-
-  <p>For help using this system, please see
-     <a
-href="http://www.mediawiki.org/wiki/Bugzilla">Mediawiki:Bugzilla</a>.</p>
-
-  <p><b>Not sure how to explain your problem clearly? Read
-     <a href="http://www.chiark.greenend.org.uk/~sgtatham/bugs.html"><i>How
-to Report Bugs Effectively</i></a> for some general pointers.</b></p>
+        <div class="bz_common_actions">
+          <ul>
+            <li>
+              <a id="enter_bug" href="enter_bug.cgi"><span>Report
+              [%= terms.aBug %]
+              [% IF !user.id %]
+                    <i>(Account Needed)</i>
+              [% END %]
+              </span></a>
+            </li>
+            <li>
+              <a id="query" href="query.cgi"><span>Search Bugs</span></a>
+            </li>
+            <li>
+              <a id="help" href="http://www.mediawiki.org/wiki/Bugzilla"><span>Help on Bugzilla</span></a>
+            </li>
+            <li>
+              <a id="report" href="report.cgi"><span>Reports / Charts</span></a>
+            </li>
+            <li>
+              <a id="account"
+                 [% IF user.id %]
+                   href="userprefs.cgi"><span>User Preferences</span></a>
+                 [% ELSIF Param('createemailregexp')
+                          && user.authorizer.user_can_create_account
+                 %]
+                   href="createaccount.cgi"><span>Open a New Account</span></a>
+                 [% ELSE %]
+                   href="?GoAheadAndLogIn=1"><span>Log In</span></a>
+                 [% END %]
+            </li>
+          </ul>
+        </div>
 
   <div style="clear:both;"></div>
   <hr />
 
-  <p>But it all boils down to a choice of:</p>
-  <ul>
-    <li><a href="query.cgi">Search existing [% terms.bug %] reports</a></li>
-    <li><a href="enter_bug.cgi">Enter a new [% terms.bug %] report</a></li>
-    <li id="report"><a href="report.cgi">Summary reports and charts</a></li>
-    <li><a href="javascript:addSidebar()">Add to Sidebar</a> (requires a Mozilla browser like Mozilla Firefox)</li>
-    <li id="quick_search_plugin">
-      <a href="javascript:window.external.AddSearchProvider('[% Param('urlbase') %]search_plugin.cgi')">Install
-      the Quick Search plugin</a> (requires Firefox 2 or Internet Explorer 7)
-    </li>
-
-
     [%# List items of links to more things users can do on this installation. %]
     [% Hook.process("links") %]
-
-  </ul>
 
   <form id="f" name="f" action="buglist.cgi" method="get"
         onsubmit="if (this.quicksearch.value == '')
@@ -97,7 +104,8 @@ to Report Bugs Effectively</i></a> for some general pointers.</b></p>
   </div>
   </form>
 
-  <div class="outro"></div>
+  <div class="outro">[% Hook.process('outro') %]</div>
+
 </div>
 
 [% PROCESS global/footer.html.tmpl %]

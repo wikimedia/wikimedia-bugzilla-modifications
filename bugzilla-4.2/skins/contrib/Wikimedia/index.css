@@ -52,28 +52,49 @@
     
     .bz_common_actions {
         display: block;
-        height: 190px;
-        width: 195px;
+        min-height: 190px;
         float: left;
-        margin: 0 3ex 3em 0;
+        position: relative;
+        margin: 0 auto;
+    }
+    .bz_common_actions ul {
+        display: inline-block;
+        list-style-type: none;
+        padding: 0;
+        float: left;
+        position: relative;
         text-align: center;
     }
-    .bz_common_actions span {
+    .bz_common_actions ul li {
+        display: block;
+        float: left;
+        vertical-align: top;
+    }
+    .bz_common_actions ul li a {
+        display: inline-block;
+        vertical-align: top;
+        height: 155px;
+        width: 145px;
+        margin: 0 2ex 2em 0;
+    }
+    .bz_common_actions ul li a span {
         position: relative;
         top: 95%;
         font-weight: bold;
     }
-    
-    .bz_common_actions,
-    .bz_common_actions:visited,
-    .bz_common_actions:hover
-    {
+    .bz_common_actions a,
+    .bz_common_actions a:visited,
+    .bz_common_actions a:hover {
         text-decoration: none;
     }
-
-    #enter_bug { background: url(index/bug.gif)     no-repeat; }
-    #query     { background: url(index/search.gif)  no-repeat; }
-    #account   { background: url(index/account.gif) no-repeat; }
+    #enter_bug { background: url(../../standard/index/file-a-bug.png)     no-repeat; }
+    #query     { background: url(../../standard/index/search.png)  no-repeat; }
+    #help      { background: url(../../standard/index/help.png)     no-repeat; }
+    #report    { background: url(index/report.png)  no-repeat; }
+    #account   {
+      background: url(../../standard/index/new-account.png) no-repeat;
+      margin-right: 0;
+    }
     
     #quicksearchForm
     {
