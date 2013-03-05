@@ -27,7 +27,7 @@ use Bugzilla::Util;
 
 our $VERSION = '0.01';
 
-# See the documentation of Bugzilla::Hook ("perldoc Bugzilla::Hook" 
+# See the documentation of Bugzilla::Hook ("perldoc Bugzilla::Hook"
 # in the bugzilla directory) for a list of all available hooks.
 sub install_update_db {
 	my ($self, $args) = @_;
@@ -68,12 +68,18 @@ sub bug_format_comment {
 		replace => \&_createGitCommitLink
 	};
 
+	my $replacerCVE = {
+		match => qr{\b(CVE-\d{4}-\d+)},
+		replace => \&_createCVELink
+	};
+
 	push( @$regexes, $replacerWP );
 	push( @$regexes, $replacerCR );
 	push( @$regexes, $replacerRT );
 	push( @$regexes, $replacerGerritChangeset );
 	push( @$regexes, $replacerGerritChangeId );
 	push( @$regexes, $replacerGitCommit );
+	push( @$regexes, $replacerCVE );
 }
 
 sub _createWikipediaLink {
@@ -107,5 +113,10 @@ sub _createGitCommitLink {
 	my $rev_link = "<a href=\"https://gerrit.wikimedia.org/r/#q,$1,n,z\" title=\"Git commit $1\">$1</a>";
 	return $rev_link;
 };
- 
+
+sub _createCVELink {
+	my $cve_link = "<a href=\"https://cve.mitre.org/cgi-bin/cvename.cgi?name=$1\" title=\"$1\">$1</a>";
+	return $cve_link;
+}
+
 __PACKAGE__->NAME;
