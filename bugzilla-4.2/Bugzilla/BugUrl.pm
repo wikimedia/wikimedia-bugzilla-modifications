@@ -71,6 +71,7 @@ use constant SUB_CLASSES => qw(
     Bugzilla::BugUrl::SourceForge
     Bugzilla::BugUrl::GitHub
     Bugzilla::BugUrl::RequestTracker
+    Bugzilla::BugUrl::Mingle
 );
 
 ###############################
