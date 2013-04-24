@@ -25,7 +25,7 @@ use base qw(Bugzilla::Extension);
 
 use Bugzilla::Util;
 
-our $VERSION = '0.01';
+our $VERSION = '0.1';
 
 # See the documentation of Bugzilla::Hook ("perldoc Bugzilla::Hook"
 # in the bugzilla directory) for a list of all available hooks.
@@ -97,23 +97,23 @@ sub _createCodeReviewLink {
 };
 
 sub _createRTLink {
-	my $rev_link = "<a href=\"https://rt.wikimedia.org/Ticket/Display.html?id=$1\" title=\"RT #$1\">RT #$1</a>";
-	return $rev_link;
+	my $rt_link = "<a href=\"https://rt.wikimedia.org/Ticket/Display.html?id=$1\" title=\"RT #$1\">RT #$1</a>";
+	return $rt_link;
 };
 
 sub _createGerritChangesetLink {
-	my $rev_link = "<a href=\"https://gerrit.wikimedia.org/r/$3\" title=\"Gerrit change #$3\">Gerrit change #$3</a>";
-	return $rev_link;
+	my $change_link = "<a href=\"https://gerrit.wikimedia.org/r/$3\" title=\"Gerrit change #$3\">Gerrit change #$3</a>";
+	return $change_link;
 };
 
 sub _createGerritChangeidLink {
-	my $rev_link = "<a href=\"https://gerrit.wikimedia.org/r/#q,$1,n,z\" title=\"Gerrit Change-Id: $1\">$1</a>";
-	return $rev_link;
+	my $change_link = "<a href=\"https://gerrit.wikimedia.org/r/#q,$1,n,z\" title=\"Gerrit Change-Id: $1\">$1</a>";
+	return $change_link;
 };
 
 sub _createGitCommitLink {
-	my $rev_link = "<a href=\"https://gerrit.wikimedia.org/r/#q,$1,n,z\" title=\"Git commit $1\">$1</a>";
-	return $rev_link;
+	my $commit_link = "<a href=\"https://gerrit.wikimedia.org/r/#q,$1,n,z\" title=\"Git commit $1\">$1</a>";
+	return $commit_link;
 };
 
 sub _createCVELink {
