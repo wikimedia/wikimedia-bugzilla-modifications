@@ -2,6 +2,8 @@
 
 # its stolen from somewhere but was mostly re-written by Dirk Mueller <mueller@kde.org>, 08/2006
 # templatized by Matt Rogers <mattr@kde.org>, 12/2007
+
+# Upstream: https://projects.kde.org/projects/websites/bugs-kde-org/repository/revisions/kde/entry/weekly-bug-summary.cgi
 use strict;
 use lib ".";
 
@@ -289,7 +291,7 @@ AND
 AND
     longdescs.who = bugs_activity.who
 AND
-    longdescs.thetext like \"SVN commit%\"
+    longdescs.thetext like \"%change APPROVED and MERGED%\"
 GROUP BY
     profiles.login_name, bugs.bug_id
 ORDER BY
