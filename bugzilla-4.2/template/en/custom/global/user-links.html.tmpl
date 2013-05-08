@@ -1,17 +1,17 @@
 			<li><a href="report.cgi">Reports</a></li>
-			<li><a href="weekly-bug-summary.cgi?tops=10&days=7">Weekly summary</a></li>
+			<li><a href="weekly-bug-summary.cgi?tops=10&days=7">Weekly Summary</a></li>
 			[% IF Param('shutdownhtml') || Bugzilla.has_flags %]
 				<li>
 					[% IF user.id %]
-						<a href="request.cgi?requester=[% user.login FILTER url_quote %]&amp;requestee=
-							[% user.login FILTER url_quote %]&amp;do_union=1&amp;group=type&amp;action=queue">My requests</a>
+						<a href="request.cgi?requester=[% user.login FILTER uri %]&amp;requestee=
+							[% user.login FILTER uri %]&amp;do_union=1&amp;group=type&amp;action=queue">My Requests</a>
 					[% ELSE %]
 						<a href="request.cgi">Requests</a>
 					[% END %]
 				</li>
 			[% END %]
 			[% IF user.id %]
-				<li><a href="votes.cgi?action=show_user">My votes</a></li>
+				<li><a href="votes.cgi?action=show_user">My&nbsp;Votes</a></li>
 			[% END %]
 
 			[% IF user.login %]
