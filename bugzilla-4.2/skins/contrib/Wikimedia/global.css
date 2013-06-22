@@ -422,6 +422,10 @@ div.user_match {
     list-style-type: none;
 }
 
+ul.bug_urls {
+    list-style-image: none;
+}
+
 form#Create th {
     text-align: right;
 }
