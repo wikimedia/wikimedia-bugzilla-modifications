@@ -1,0 +1,499 @@
+[%# The contents of this file are subject to the Mozilla Public
+  # License Version 1.1 (the "License"); you may not use this file
+  # except in compliance with the License. You may obtain a copy of
+  # the License at http://www.mozilla.org/MPL/
+  #
+  # Software distributed under the License is distributed on an "AS
+  # IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+  # implied. See the License for the specific language governing
+  # rights and limitations under the License.
+  #
+  # The Original Code is the Bugzilla Bug Tracking System.
+  #
+  # The Initial Developer of the Original Code is Netscape Communications
+  # Corporation. Portions created by Netscape are
+  # Copyright (C) 1998 Netscape Communications Corporation. All
+  # Rights Reserved.
+  #
+  # Contributor(s): Gervase Markham <gerv@gerv.net>
+  #                 Christine Begle <cbegle@mozilla.org>
+  #%]
+
+[%# INTERFACE:
+  # This template has the same interface as create.html.tmpl
+  #%]
+
+[% PROCESS global/variables.none.tmpl %]
+
+[% USE Bugzilla %]
+[% cgi = Bugzilla.cgi %]
+
+[% PROCESS global/header.html.tmpl
+   title = "Report $terms.abug or request a new feature"
+   onload = "PutDescription()"
+   style = "
+#somebugs {
+  border: 1px grey solid;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 5px;
+  width: 100%;
+  height: 250px;
+}
+.field_description {
+  text-align: right; 
+  vertical-align: top;
+}
+.field_description > span {
+  font-weight: bold;
+}
+.field_content {
+  vertical-align: top;
+}
+.search_terms {
+  font-family: monospace;
+  font-style: italic;
+}
+.keyboard-key {
+  border: 1px solid #aaa;
+  border-radius: 2px;
+  box-shadow: 1px 2px 2px #ddd;
+  background-color: #f9f9f9;
+  background-image: linear-gradient(top, #eee, #f9f9f9, #eee);
+  padding: 1px 3px;
+  font-family: inherit;
+  font-size: 0.85em;
+}
+.support_requests {
+  text-align: center;
+  background-image: url('http://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Gnome_User_Speech.svg/45px-Gnome_User_Speech.svg.png');
+  background-repeat: no-repeat;
+  padding-left: 30px;
+  display: block;
+  border: 2px solid #bfb1a3;
+  color:black;
+  margin-bottom:10px;
+}
+h2 {
+  font-size: 1.6em;
+  font-family: sans-serif;
+  padding: 2px;
+  line-height: 1.2em;
+  border-bottom: 1px solid rgb(170, 170, 170);
+}
+h3 {
+  font-size: 150%; 
+  font-family: sans-serif; 
+  padding: 2px;
+  line-height: 1.5em;
+  border-bottom: 1px solid rgb(170, 170, 170);
+}
+  "
+ %]
+
+[% tablecolor = "#dbeeff" %]
+
+[%# This script displays the descriptions for selected components. %]
+<script type="text/javascript">
+var descriptions = [
+[% FOREACH c = product.components %]
+  '[% c.description FILTER js %]',
+[% END %]
+];
+
+function PutDescription() {
+    if ((document.getElementById) && (document.body.innerHTML)) {
+        var componentIndex = document.getElementById('component').selectedIndex;
+        if (componentIndex != -1) {
+            var description = document.getElementById('description');
+            description.innerHTML = descriptions[componentIndex];
+        }
+    }
+}
+</script>
+
+[%# Inserted to collapse optional parts by default -- aklapper %]
+<script type="text/javascript">
+<!-- 
+  function toggle(id) {
+    var z = document.getElementById(id);
+    if (z.style.display == '')
+      z.style.display = 'none';
+    else
+      z.style.display = '';
+  }
+//-->
+</script>
+
+<h2 id="header">Report a software bug or request a new feature</h3>
+
+  [% IF product.name == "MediaWiki" OR 
+        product.name == "MediaWiki extensions" %]
+
+    <p class="support_requests">Looking for technical support or help to make your site work with the MediaWiki software?<br>Visit the <a href="https://www.mediawiki.org/wiki/Project:Support_desk">MediaWiki Support Desk</a> before filing a bug report.</p>
+  [% END %]      
+  [% IF product.name == "Wikimedia" %]
+    <p class="support_requests">Looking for general help on Wikipedia?<br>Visit the <a href="https://en.wikipedia.org/wiki/Wikipedia:Village_pump">Wikipedia Village Pump</a> or <a href="https://en.wikipedia.org/wiki/Wikipedia:Help_desk">Help Desk</a> to discuss.</p>
+  [% END %]      
+
+<p>
+Welcome! Here you can report a bug or a request a new feature. We ask you to answer a few short questions. This will help you to provide good information for the developers. Newcomers to Bugzilla are also encouraged to read <a target="_blank" href="https://www.mediawiki.org/wiki/How_to_report_a_bug">these guidelines</a> before creating a new [% terms.bug %] report here. Thanks for your help!
+</p>
+
+<h3 id="step1">Step 1 of 3: Find out if your issue has already been reported</h3>
+
+<p>
+    Please search to see if your [% terms.bug %] or feature request has been already reported. 
+    The results will appear in the box below.
+  </p>
+
+  <form action="buglist.cgi" method="get" target="somebugs">
+    <input type="hidden" name="format" value="simple">
+    <input type="hidden" name="order" value="relevance desc">
+    <input type="hidden" name="bug_status" value="__all__">
+    <input type="hidden" name="product" value="[% product.name FILTER html %]">
+    [% IF product.name == "MediaWiki" OR 
+          product.name == "Wikimedia" %]
+      <input type="hidden" name="product" value="MediaWiki extensions">
+    [% END %]      
+    <input type="hidden" name="chfieldfrom" value="-24m">
+    <input type="hidden" name="chfieldto" value="Now">
+    <input type="hidden" name="chfield" value="[Bug creation]">
+    <input type="text" name="content" size="50">
+    <input type="submit" id="search" value="Search">
+  </form>
+
+<iframe name="somebugs" id="somebugs" src="">
+</iframe>
+
+<p>
+  You may try different words (e.g. <span class="search_terms">remove</span> instead of <span class="search_terms">delete</span>).
+  If you find [% terms.abug %] report in the search results which looks the same as your problem, please add
+  any useful extra information to it instead of creating a new report.
+</p>
+
+
+<h3 id="step2">Step 2 of 3: Describe the problem</h3>
+
+<p>
+  If you could not find an already existing report, 
+  tell us more about your issue.
+</p>
+
+<form method="post" action="post_bug.cgi">
+  <input type="hidden" name="format" value="guided">
+  <input type="hidden" name="assigned_to" value="">
+  <input type="hidden" name="priority"
+         value="[% default.priority FILTER html %]">
+  <input type="hidden" name="version"
+         value="[% default.version FILTER html %]">
+  <input type="hidden" name="token" value="[% token FILTER html %]">
+
+<table style="vertical-align:top; padding:5px; border-spacing:5px; border:0px; margin-right:0px">
+
+  <tr>
+    <td class="field_description">
+      <span>Product</span>
+    </td>
+    <td class="field_content">
+      <input type="hidden" name="product" value="[% product.name FILTER html %]">
+      [% product.name FILTER html %]
+    </td>
+  </tr>
+
+  <tr>
+  <tr style="background-color:[% tablecolor %];">
+    <td class="field_description">
+      <span>Summary</span>
+    </td>
+    <td class="field_content">
+      <p>
+        How would you summarize the issue in one sentence?
+      </p>
+      <p>
+        <span>Good example:</span>
+        <span class="search_terms">
+          Changing gender does not update the preferences</span>; 
+        <span>Bad example:</span>
+        <span class="search_terms">
+          Problem with wikipage
+        </span>
+      </p>
+      <input type="text" size="80" name="short_desc" id="short_desc" 
+             maxlength="255" spellcheck="true">
+    </td>
+  </tr>
+    <td class="field_description">
+      <span>Component</span>
+    </td>
+    <td class="field_content">
+      <p>
+        In which area does the issue occur?  If you are unsure, just use "General/Unknown".
+        You could also use the same component as
+        similar [% terms.bugs %] you found when searching above, or you could read the list of
+        <a target="_blank" href="describecomponents.cgi?product=
+            [% product.name FILTER uri %]">component
+        descriptions</a>.
+      </p>
+      <table style="border:0px; padding:0px; border-spacing:0px; margin-right:0px">
+        <tr>
+          <td class="field_content">
+            <select name="component" id="component"
+                    size="5" onchange="PutDescription()">
+              [% IF NOT default.component_ %]
+                [%# Various b.m.o. products have a "General" component,
+                    which is a useful default. %]
+                [% default.component_ = "General" %]
+              [% END %]
+              [% FOREACH c = product.components %]
+                <option value="[% c.name FILTER html %]"
+                  [% " selected=\"selected\"" IF c.name == default.component_ %]>
+                  [% c.name FILTER html %]
+                </option>
+              [% END %]
+            </select>
+          </td>
+          <td style="vertical-align:top;">
+              <div id="description" style="color: #24569b; margin-left: 10px;
+                                           height: 5em; overflow: auto;">
+                <script type="text/javascript">
+                  if ((document.getElementById) && (document.body.innerHTML)) {
+                    document.write("\
+                    Select a component to see its description here.");
+                  }
+                </script>
+              </div>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <tr style="background-color:[% tablecolor %];">
+    <td class="field_description">
+      <span>Intention</span>
+    </td>
+    <td class="field_content">
+      <p>
+        What were you trying to do (and why)?
+      </p>
+      [% INCLUDE global/textarea.html.tmpl
+        name    = 'intention'
+        minrows = 3
+        cols    = constants.COMMENT_COLS
+      %]
+    </td>
+  </tr>
+
+  <tr>
+    <td class="field_description">
+      <span>Steps to Reproduce</span>
+    </td>
+    <td class="field_content">
+      <p>
+        What did you do? Describe how to reproduce the
+        problem, so another person could follow your steps.
+      </p>
+      [% INCLUDE global/textarea.html.tmpl
+        name           = 'reproduce_steps'
+        minrows        = 4
+        cols           = constants.COMMENT_COLS
+        defaultcontent = "1. \n2. \n3. "
+      %]
+    <p>
+     Does it happen more than once (if you have time to test)?
+    </p>
+      <select name="reproducible">
+        <option name="DidntTry" value="Didn't try">
+          I have not tried to reproduce it.
+        </option>
+        <option name="AlwaysReproducible" value="Always">
+          I have tried more than once and it happens every time.
+        </option>
+        <option name="Sometimes" value="Sometimes">
+          Problem happens sometimes, but not always.
+        </option>
+        <option name="NotReproducible" value="Couldn't Reproduce">
+          I have tried, but I could not reproduce it.
+        </option>
+      </select>
+    </td>
+  </tr>
+
+  <tr style="background-color:[% tablecolor %];">
+    <td class="field_description">
+      <span>Results</span>
+    </td>
+    <td class="field_content">
+      <p>
+        What happened?
+      </p>
+      [% INCLUDE global/textarea.html.tmpl
+        name    = 'actual_results'
+        minrows = 3
+        cols    = constants.COMMENT_COLS
+      %]
+    </td>
+  </tr>
+
+  <tr>
+    <td class="field_description">
+      <span>Expectations</span>
+    </td>
+    <td class="field_content">
+      <p>
+        What were your expectations instead?
+      </p>
+      [% INCLUDE global/textarea.html.tmpl
+        name    = 'expected_results'
+        minrows = 3
+        cols    = constants.COMMENT_COLS
+      %]
+    </td>
+  </tr>
+
+  <tr style="background-color:[% tablecolor %];">
+    <td class="field_description">
+      <span>Severity</span>
+    </td>
+    <td class="field_content">
+      <p>
+        How serious is the problem?
+      </p>
+      <select name="bug_severity">
+        <option name="blocker" value="blocker">
+          Blocker: This completely blocks software development or testing work.
+        </option>
+       <option name="critical" value="critical">
+          Critical: It crashes, hangs, or makes you irrevertibly lose data.
+        </option>
+        <option name="major" value="major">
+          Major: A major feature is broken that is used by many people.
+        </option>
+        <option name="normal" value="normal">
+          Normal: An average [% terms.bug %] that should be fixed.
+        </option>
+        <option name="minor" value="minor">
+          Minor: Minor loss of function, and there is an easy workaround.
+        </option>
+        <option name="trivial" value="trivial">
+          Trivial: A cosmetic problem, such as a misspelled word or
+          misaligned text.
+        </option>
+        <option name="enhancement" value="enhancement" selected="selected">
+          Enhancement: Request for new functionality or enhancement.
+        </option>
+      </select>
+    </td>
+  </tr>
+
+  <tr>
+    <td class="field_description">
+      <span>URL</span><span> (optional)</span>
+    </td>
+    <td class="field_content">
+      <p>
+        Is there a web address where the problem can be seen?
+      </p>
+      <input type="text" size="80" name="bug_file_loc" value="http://">
+   </td>
+  </tr>
+
+  [% cf_browser = [ "---", "Apple Safari", "Firefox", "Google Chrome", "Internet Explorer", "Opera", "Other" ] %]
+
+  <tr style="background-color:[% tablecolor %];">
+    <td class="field_description">
+      <span>Web browser</span><span> (optional)</span>
+    </td>
+    <td class="field_content">
+     <p>
+        Which web browser do you use to visit internet pages?
+      </p>
+      [% PROCESS select sel = 'cf_browser' %]
+    </td>
+  </tr>
+
+  <tr>
+    <td class="field_description">
+      <span>Any Additional Information</span><span> (optional)</span>
+    </td>
+    <td class="field_content">
+      <p>
+        Do you have any additional information? Anything which may be
+        relevant, such as the 
+        <span style="font-weight:bold;"><a href="https://www.mediawiki.org/wiki/Help:Skins">skin</a></span>
+        you were using (does the [% terms.bug %] still occur
+        with a different skin?), or anything special about
+        <span style="font-weight:bold;">your computer's configuration</span>.
+        A <a href="https://en.wikipedia.org/wiki/Screenshot"><span style="font-weight:bold;">screenshot</span></a>
+        which shows the problem, or any information longer than a few lines, such as a
+        <span style="font-weight:bold;">HTML testcase</span>,
+        <a href="https://www.mediawiki.org/wiki/Manual:How_to_debug"><span style="font-weight:bold;">debug log file</span>
+        or <span style="font-weight:bold;">stack trace</span></a>, should be added
+        using the <span class="keyboard-key">Add an Attachment</span> link on the [% terms.bug %] report, after
+        it is filed.
+       </p>
+      [% INCLUDE global/textarea.html.tmpl
+        name    = 'additional_info'
+        minrows = 3
+        cols    = constants.COMMENT_COLS
+      %]
+    </td>
+  </tr>
+
+  [% Hook.process('form') %]
+</table>
+
+
+<h3 id="step3">Step 3 of 3: Submit the report</h3>
+
+<p>
+  <input type="submit" id="report" value="    Submit Report    "
+   onclick="if (this.form.comment.value == '')
+   { alert('Please enter some details about this [% terms.bug %] or feature request first.');
+     this.form.comment.focus();
+     return false; } return true;">
+</p>
+
+<p>
+  Submit your report by pressing the <span class="keyboard-key">Submit Report</span> button. 
+  That's it! Thank you very much! You will be notified by email about any
+  progress that is made on fixing your [% terms.bug %] or feature request. 
+
+<p>  
+  Please be warned
+  that a lot of [% terms.bug %] reports get filed - it may take quite a 
+  while to get around to yours. You can help the process by making sure your 
+  [%+ terms.bug %] report is
+  complete and easy to understand, and by quickly replying to any questions
+  which may arrive by email.
+</p>
+<p>
+  If you feel like trying to write a software 
+  patch to fix the problem yourself, read the information on
+  <a target="_blank" href="https://www.mediawiki.org/wiki/Developer_access">developer access</a> and <a target="_blank" href="https://www.mediawiki.org/wiki/Gerrit/Tutorial">how to use Git/Gerrit</a>.
+</p>
+
+    </form>
+
+[% PROCESS global/footer.html.tmpl %]
+
+[%############################################################################%]
+[%# Block for SELECT fields                                                  #%]
+[%############################################################################%]
+
+[% BLOCK select %]
+  <select name="[% sel %]">
+    [%- IF default.$sel %]
+      <option value="[% default.$sel FILTER html %]" selected="selected">
+        [% default.$sel FILTER html -%]
+      </option>
+    [% END %]
+    [%- FOREACH x = $sel %]
+      [% NEXT IF x == default.$sel %]
+      <option value="[% x FILTER html %]">
+        [% x FILTER html -%]
+      </option>
+    [%- END %]
+  </select>
+[% END %]
