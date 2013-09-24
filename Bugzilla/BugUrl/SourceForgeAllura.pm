@@ -30,7 +30,7 @@ sub should_handle {
     # Allura URLs have this form:
     #   https://sourceforge.net/p/pywikipediabot/*/349/
     return (lc($uri->authority) eq 'sourceforge.net'
-           and $uri->path =~ m|^/p/[0-9a-zA-Z_]+/[0-9a-zA-Z_]+/\d+$|) ? 1 : 0;
+           and $uri->path =~ m|^/p/[0-9a-zA-Z_]+/[0-9a-zA-Z_-]+/\d+/?$|) ? 1 : 0;
 }
 
 sub _check_value {
