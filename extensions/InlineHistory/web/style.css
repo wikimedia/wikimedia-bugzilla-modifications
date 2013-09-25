@@ -14,12 +14,14 @@
     font-weight: normal;
     font-size: small;
     color: #444;
-    border-top: 1px dotted #C8C8BA;
-    padding-top: 5px;
+/*    border-top: 1px dotted #C8C8BA; */
+/*    padding-top: 5px; */
+    padding: 0px 0px 0px 25px;
 }
 
 .bz_comment.ih_history {
-    padding: 5px 5px 0px 5px
+/*    padding: 5px 5px 0px 5px; */
+    padding: 0px 5px 0px 25px;
 }
 
 .ih_history_item {
