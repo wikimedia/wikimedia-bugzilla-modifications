@@ -403,17 +403,17 @@ code {
 }
 pre {
 	padding: 1em;
-	border: 1px dashed #2f6fab;
+	border: 1px solid #ddd;
 	color: black;
 	background-color: #f9f9f9;
 	line-height: 1.1em;
 	word-wrap: break-word;
 }
 tbody.file pre {
-     padding: 0;
-     border: 0;
-     background: transparent;
- }
+	padding: 0;
+	border: 0;
+	background: transparent;
+}
 ul {
 	line-height: 1.5em;
 	list-style-type: square;
