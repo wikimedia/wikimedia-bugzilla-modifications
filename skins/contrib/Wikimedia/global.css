@@ -66,6 +66,8 @@
         color: #fff;
         -moz-border-radius-topleft: 5px;
         -moz-border-radius-topright: 5px;
+        border-top-left-radius: 5px;
+        border-top-right-radius: 5px;
         font-size: 110%;
         margin: 0;
         padding: 0.5em;
