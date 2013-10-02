@@ -446,21 +446,6 @@ form#Create .comment {
     height: 20px;
 }
 
-#select_button {
-    background-image: url(global/right.png);
-}
-
-#deselect_button {
-    background-image: url(global/left.png);
-}
-
-#up_button {
-    background-image: url(global/up.png);
-}
-
-#down_button {
-    background-image: url(global/down.png);
-}
 .bz_emailprefs tr.bz_row_odd {
     background-color: #f0f0f0;
 }
