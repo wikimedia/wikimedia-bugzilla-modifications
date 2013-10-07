@@ -2,11 +2,11 @@
     margin: 8px 0; 
     padding: 0.3em 0.3em 0.3em 0.5em; 
     -moz-border-radius: 0.5em; 
+    border-radius: 0.5em;
     font-size: 105%; 
     font-weight: bold;
     background:transparent url(images/block-base.png) repeat-x scroll center bottom;
     border: 1px solid silver;
-    repeat: repeat-x;
     line-height: 1.75em;
 }
 
@@ -63,7 +63,7 @@ td.bz_section_spacer {
     border: 1px solid silver;
 }
 .bz_comment_text {
-    font-size: 1em;;
+    font-size: 1em;
     font-family: monospace, "Courier New";
 }
 #duplicate_settings, #votes_container {
