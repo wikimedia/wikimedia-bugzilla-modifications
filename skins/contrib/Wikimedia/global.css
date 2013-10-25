@@ -336,22 +336,6 @@ table.bz_time_tracking_table {
     padding-left: 1em;
 }
 
-table.attachment_info th {
-    text-align: right;
-    vertical-align: top;
-}
-
-table.attachment_info td {
-    text-align: left;
-    vertical-align: top;
-}
-
-/* Text displayed when the attachment is not viewable by the web browser */
-#noview {
-    text-align: left;
-    vertical-align: middle;
-}
-
 /* For bug fields */
 .uneditable_textarea {
     width: 30em;
@@ -436,30 +420,11 @@ div.user_match {
     list-style-type: none;
 }
 
+/* Needed to overwrite vector.css */
 ul.bug_urls {
     list-style-image: none;
 }
 
-form#Create th {
-    text-align: right;
-}
-
-form#Create .comment {
-    vertical-align: top;
-    overflow: auto;
-    color: green;
-    margin: 0 0.5em;
-    padding: 0.3em;
-    height: 8ex;
-}
-
-.image_button {
-    background-repeat: no-repeat;
-    background-position: center center;
-    width: 30px;
-    height: 20px;
-}
-
-.bz_emailprefs tr.bz_row_odd {
+.bz_emailprefs {
     background-color: #f0f0f0;
 }
