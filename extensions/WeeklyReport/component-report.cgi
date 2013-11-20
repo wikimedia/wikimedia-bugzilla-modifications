@@ -50,13 +50,9 @@ use Bugzilla;
 use Bugzilla::Product;
 use Bugzilla::Constants;
 use Bugzilla::Error;
+use Bugzilla::Util;
 
 use vars qw($vars $template);
-
-eval "use GD";
-my $use_gd = $@ ? 0 : 1;
-eval "use Chart::Lines";
-$use_gd = 0 if $@;
 
 # If we're using bug groups for products, we should apply those restrictions
 # to viewing reports, as well.  Time to check the login in that case.
@@ -69,7 +65,7 @@ my $user = Bugzilla->login(LOGIN_OPTIONAL);
 print $cgi->header(-type => 'text/html', -expires => '+3M');
 
 my $query = <<EOF
-SELECT   count(*), products.name, components.name, bug_severity 
+SELECT   count(*), products.name, components.name, bug_severity
   FROM   bugs, products, components
  WHERE   ( bug_status = 'NEW' or bug_status = 'ASSIGNED' or bug_status = 'REOPENED' or bug_status = 'UNCONFIRMED' )
    AND   products.name = ?
@@ -83,8 +79,13 @@ EOF
 
 #Report on components by severity and priority
 my $sth = Bugzilla->dbh->prepare($query);
-my $product = $cgi->param('product');
-if ($product =~ /^([\w.-\s]+)$/) { $product = $1 }
+my $product = trim($cgi->param('product'));
+
+# FIXME: Print a "error" message
+ThrowUserError('product_blank_name') if !$product;
+
+if ($product =~ m/^([\w.-]+)$/) { $product = $1; }
+trick_taint($product);
 $sth->execute($product);
 
 my (@bug_counts, %bugs, %total_bugs);
@@ -92,6 +93,7 @@ my $disp_component;
 my $total_bug_count;
 
 my $product_obj = new Bugzilla::Product({ 'name' => $product });
+ThrowUserError('invalid_product_name', {product => $product}) if !$product_obj;
 
 $vars->{'product'} = $product;
 $vars->{'all_severities'} = Bugzilla::Field::get_legal_field_values('bug_severity');
@@ -110,4 +112,3 @@ $vars->{'bug_sev_counts'} = \%bugs;
 
 $template->process("weeklyreport/component-report.html.tmpl", $vars)
   || ThrowTemplateError($template->error());
-

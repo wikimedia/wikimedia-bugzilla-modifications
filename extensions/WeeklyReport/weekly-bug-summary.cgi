@@ -13,8 +13,9 @@ use Bugzilla::Util;
 use Bugzilla::Error;
 use Bugzilla::Field;
 
-sub total_bugs_in_bugzilla()
-{
+Bugzilla->login(LOGIN_OPTIONAL);
+
+sub total_bugs_in_bugzilla() {
     my $dbh = Bugzilla->dbh;
 
     # figure out total bugs
@@ -34,8 +35,7 @@ sub total_bugs_in_bugzilla()
     return ($totalbugs[0], $totalwishes[0]);
 }
 
-sub bugs_opened()
-{
+sub bugs_opened() {
     my($product, $days) = @_;
 
     my $sqlproduct = "";
@@ -51,8 +51,7 @@ sub bugs_opened()
     return $count;
 }
 
-sub wishes_opened()
-{
+sub wishes_opened() {
     my($product, $days) = @_;
 
     my $sqlproduct = "";
@@ -68,8 +67,7 @@ sub wishes_opened()
     return $count;
 }
 
-sub bugs_closed()
-{
+sub bugs_closed() {
     my($product, $days) = @_;
     my $query = "";
     my $sqlproduct = "";
@@ -84,7 +82,7 @@ from
 where
     bugs.bug_severity != 'enhancement' AND
     (bugs_activity.added='RESOLVED' or bugs_activity.added='CLOSED' or
-     bugs_activity.added='NEEDSINFO')
+     bugs_activity.added='NEEDSINFO' or bugs_activity.added='VERIFIED')
 and
     bugs_activity.bug_when >= FROM_DAYS(TO_DAYS(NOW())-?)
 and
@@ -95,8 +93,7 @@ and
     return($count);
 }
 
-sub wishes_closed()
-{
+sub wishes_closed() {
     my($product, $days) = @_;
     my $query = "";
     my $sqlproduct = "";
@@ -112,7 +109,7 @@ from
 where
     bugs.bug_severity = 'enhancement' AND
     (bugs_activity.added='RESOLVED' or bugs_activity.added='CLOSED' or
-     bugs_activity.added='NEEDSINFO')
+     bugs_activity.added='NEEDSINFO' or bugs_activity.added='VERIFIED')
 and
     bugs_activity.bug_when >= FROM_DAYS(TO_DAYS(NOW())-?)
 and
@@ -123,8 +120,7 @@ and
     return($count);
 }
 
-sub open_wishes()
-{
+sub open_wishes() {
     my($product) = @_;
 
     my $sqlproduct = "";
@@ -185,7 +181,6 @@ limit $number
         $product_id{$product} = $p_id;
     }
 
-
     foreach my $product (reverse sort
                     {$product_count{$a} <=> $product_count{$b}}
                                     keys (%product_count)) {
@@ -231,7 +226,7 @@ from
     bugs, bugs_activity, profiles assign
 where
     (bugs_activity.added='RESOLVED' or bugs_activity.added = 'CLOSED' or
-     bugs_activity.added='NEEDSINFO')
+     bugs_activity.added='NEEDSINFO' or bugs_activity.added='VERIFIED')
 and
     bugs_activity.bug_when >= from_days(TO_DAYS(NOW()) - ?)
 and
@@ -239,7 +234,8 @@ and
 and
     bugs.bug_id = bugs_activity.bug_id
 and
-    (bugs.bug_status = 'RESOLVED' or bugs.bug_status = 'CLOSED')
+    (bugs.bug_status = 'RESOLVED' or bugs.bug_status = 'CLOSED' or
+    bugs_activity.added='VERIFIED')
 group by assign.login_name
 order by n desc
 limit ?
@@ -291,7 +287,7 @@ AND
 AND
     longdescs.who = bugs_activity.who
 AND
-    longdescs.thetext like \"%change APPROVED and MERGED%\"
+    longdescs.thetext like \"%merged by jenkins-bot%\"
 GROUP BY
     profiles.login_name, bugs.bug_id
 ORDER BY
@@ -320,9 +316,6 @@ LIMIT ?");
 
     return \@results;
 }
-
-
-Bugzilla->login(LOGIN_OPTIONAL);
 
 # For most scripts we don't make $cgi and $template global variables. But
 # when preparing Bugzilla for mod_perl, this script used these
@@ -380,9 +373,4 @@ $vars->{'bug_fixers_list'} = &print_bug_fixers_list($current_tops, $current_days
 $template->process("weeklyreport/weekly-bug-summary.html.tmpl", $vars)
   || ThrowTemplateError($template->error());
 
-
-
-
-
 print "</div>\n";
-
