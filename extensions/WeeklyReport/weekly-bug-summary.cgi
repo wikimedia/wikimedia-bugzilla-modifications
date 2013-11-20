@@ -346,6 +346,11 @@ $defaults{'days'} = $current_days;
 my $current_tops = 20;
 $current_tops = $cgi->param('tops') if (defined $cgi->param('tops'));
 $current_tops = 20 if (!detaint_natural($current_tops));
+
+# Reset tops parameter to default if very long
+my $length_cgi_tops = length ($cgi->param('tops'));
+$current_tops = 20 if ($length_cgi_tops > 15);
+
 $defaults{'tops'} = $current_tops;
 
 $vars->{'duration'} = $current_days;
