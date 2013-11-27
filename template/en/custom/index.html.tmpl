@@ -32,9 +32,46 @@
 [% PROCESS global/header.html.tmpl
    title = "Wikimedia $terms.Bugzilla Main Page"
    header = "Main Page" 
+   style_urls = [ 'skins/contrib/Wikimedia/index.css' ]
 %]
 
-<link rel="stylesheet" href="skins/contrib/Wikimedia/index.css" media="screen" />
+
+<script type="text/javascript">
+<!--
+function onLoadActions() {
+  quicksearchHelpText('quicksearch_main', 'show');
+  if( window.external.AddSearchProvider ){
+    YAHOO.util.Dom.removeClass('quicksearch_plugin', 'bz_default_hidden');
+  }
+  document.getElementById('quicksearch_top').focus();
+}
+var quicksearch_message = "Enter [% terms.abug %] # or some search terms";
+
+function checkQuicksearch( form ) {
+  if (form.quicksearch.value == '' || form.quicksearch.value == quicksearch_message ) { 
+    alert('Please enter one or more search terms first.');
+    return false; 
+  }
+  return true;         
+}
+
+function quicksearchHelpText(el_id, action){
+  var el = document.getElementById(el_id);
+  if ( action == "show") {
+    if( el.value == "" ) {
+      el.value = quicksearch_message
+      YAHOO.util.Dom.addClass(el, "quicksearch_help_text");
+    }
+  } else {
+    if( el.value == quicksearch_message ) {
+      el.value = "";
+      YAHOO.util.Dom.removeClass(el, "quicksearch_help_text");
+    }
+  }
+}
+YAHOO.util.Event.onDOMReady(onLoadActions);
+//-->
+</script>
 
 <div id="page-index">
   [% IF user.settings.skin.value=='Wikimedia' %]
@@ -76,7 +113,7 @@ to report a bug</i></a> for some pointers.</b></p>
                  [% IF user.id %]
                    href="userprefs.cgi"><span>User Preferences</span></a>
                  [% ELSIF Param('createemailregexp')
-                          && user.authorizer.user_can_create_account
+                          && user.authorizer.user_can_create_account 
                  %]
                    href="createaccount.cgi"><span>Open a New Account</span></a>
                  [% ELSE %]
@@ -90,22 +127,20 @@ to report a bug</i></a> for some pointers.</b></p>
   <hr />
 
     [%# List items of links to more things users can do on this installation. %]
-    [% Hook.process("links") %]
+    [% Hook.process('additional_links') %]
 
-  <form id="f" name="f" action="buglist.cgi" method="get"
-        onsubmit="if (this.quicksearch.value == '')
-                  { alert('Please enter one or more search terms first.');
-                    return false; } return true;">
-  <div>
-    <p>Enter [% terms.abug %] # or some search terms:</p>
-    <input id="quicksearch" type="text" name="quicksearch">
-    <input id="find" type="submit" value="Find">
-    <a href="page.cgi?id=quicksearch.html">[Help]</a>
-  </div>
-  </form>
-
-  <div class="outro">[% Hook.process('outro') %]</div>
-
+        <form id="quicksearchForm" name="quicksearchForm" action="buglist.cgi" method="get"
+              onsubmit="return checkQuicksearch(this);">
+          <div>
+            <input id="quicksearch_main" type="text" name="quicksearch"
+              title="Quick Search" 
+              onfocus="quicksearchHelpText(this.id, 'hide');"
+              onblur="quicksearchHelpText(this.id, 'show');"
+            >
+            <input id="find" type="submit" value="Quick Search">
+          </div>
+        </form>
+        <div class="outro">[% Hook.process('outro') %]</div>
 </div>
 
 [% PROCESS global/footer.html.tmpl %]
