@@ -14,9 +14,11 @@
 #
 # Contributor(s): Andre Klapper <ak-47@gmx.net>
 
-package Bugzilla::BugUrl::Mingle;
+package Bugzilla::Extension::MoreBugUrl::RequestTracker;
+
+use 5.10.1;
 use strict;
-use base qw(Bugzilla::BugUrl);
+use parent qw(Bugzilla::BugUrl);
 
 use Bugzilla::Error;
 use Bugzilla::Util;
@@ -27,10 +29,11 @@ use Bugzilla::Util;
 
 sub should_handle {
     my ($class, $uri) = @_;
-    # Mingle URLs have this form:
-    #   https://mingle.corp.wikimedia.org/projects/*/cards/1234
-    return (lc($uri->authority) eq 'mingle.corp.wikimedia.org'
-           and $uri->path =~ m|^/projects/[0-9a-zA-Z_]+/cards/\d+$|) ? 1 : 0;
+    # RT URLs have this form:
+    #   http[s]://rt.wikimedia.org/Ticket/Display.html?id=12345
+    return (lc($uri->authority) eq 'rt.wikimedia.org'
+           and $uri->path =~ m|^/Ticket/Display\.html$|
+           and $uri->query_param('id') =~ /^\d+$/) ? 1 : 0;
 }
 
 sub _check_value {

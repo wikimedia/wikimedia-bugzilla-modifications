@@ -17,6 +17,9 @@ use constant MORE_SUB_CLASSES => qw(
     Bugzilla::Extension::MoreBugUrl::RT
     Bugzilla::Extension::MoreBugUrl::GetSatisfaction
     Bugzilla::Extension::MoreBugUrl::PHP
+    Bugzilla::Extension::MoreBugUrl::Mingle
+    Bugzilla::Extension::MoreBugUrl::RequestTracker
+    Bugzilla::Extension::MoreBugUrl::SourceForgeAllura
 );
 
 # We need to update bug_see_also table because both
@@ -27,6 +30,9 @@ sub install_update_db {
     my $should_rename = $dbh->selectrow_array(
         q{SELECT 1 FROM bug_see_also
           WHERE class IN ('Bugzilla::BugUrl::Rietveld', 
+                          'Bugzilla::BugUrl::Mingle', 
+                          'Bugzilla::BugUrl::RequestTracker', 
+                          'Bugzilla::BugUrl::SourceForgeAllura', 
                           'Bugzilla::BugUrl::ReviewBoard')});
 
     if ($should_rename) {
@@ -34,6 +40,15 @@ sub install_update_db {
                                  WHERE class = ?');
         $sth->execute('Bugzilla::Extension::MoreBugUrl::ReviewBoard',
                       'Bugzilla::BugUrl::ReviewBoard');
+
+        $sth->execute('Bugzilla::Extension::MoreBugUrl::Mingle',
+                      'Bugzilla::BugUrl::Mingle');
+
+        $sth->execute('Bugzilla::Extension::MoreBugUrl::RequestTracker',
+                      'Bugzilla::BugUrl::RequestTracker');
+
+        $sth->execute('Bugzilla::Extension::MoreBugUrl::SourceForgeAllura',
+                      'Bugzilla::BugUrl::SourceForgeAllura');
 
         $sth->execute('Bugzilla::Extension::MoreBugUrl::Rietveld',
                       'Bugzilla::BugUrl::Rietveld');

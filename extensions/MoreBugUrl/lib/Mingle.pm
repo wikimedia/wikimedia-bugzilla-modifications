@@ -12,11 +12,13 @@
 #
 # The Original Code is the Bugzilla Bug Tracking System.
 #
-# Contributor(s): Kunal Mehta <legoktm@gmail.com>
+# Contributor(s): Andre Klapper <ak-47@gmx.net>
 
-package Bugzilla::BugUrl::SourceForgeAllura;
+package Bugzilla::Extension::MoreBugUrl::Mingle;
+
+use 5.10.1;
 use strict;
-use base qw(Bugzilla::BugUrl);
+use parent qw(Bugzilla::BugUrl);
 
 use Bugzilla::Error;
 use Bugzilla::Util;
@@ -27,10 +29,10 @@ use Bugzilla::Util;
 
 sub should_handle {
     my ($class, $uri) = @_;
-    # Allura URLs have this form:
-    #   https://sourceforge.net/p/pywikipediabot/*/349/
-    return (lc($uri->authority) eq 'sourceforge.net'
-           and $uri->path =~ m|^/p/[0-9a-zA-Z_]+/[0-9a-zA-Z_-]+/\d+/?$|) ? 1 : 0;
+    # Mingle URLs have this form:
+    #   https://mingle.corp.wikimedia.org/projects/*/cards/1234
+    return (lc($uri->authority) eq 'mingle.corp.wikimedia.org'
+           and $uri->path =~ m|^/projects/[0-9a-zA-Z_]+/cards/\d+$|) ? 1 : 0;
 }
 
 sub _check_value {

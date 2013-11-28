@@ -12,11 +12,13 @@
 #
 # The Original Code is the Bugzilla Bug Tracking System.
 #
-# Contributor(s): Andre Klapper <ak-47@gmx.net>
+# Contributor(s): Kunal Mehta <legoktm@gmail.com>
 
-package Bugzilla::BugUrl::RequestTracker;
+package Bugzilla::Extension::MoreBugUrl::SourceForgeAllura;
+
+use 5.10.1;
 use strict;
-use base qw(Bugzilla::BugUrl);
+use parent qw(Bugzilla::BugUrl);
 
 use Bugzilla::Error;
 use Bugzilla::Util;
@@ -27,11 +29,10 @@ use Bugzilla::Util;
 
 sub should_handle {
     my ($class, $uri) = @_;
-    # RT URLs have this form:
-    #   http[s]://rt.wikimedia.org/Ticket/Display.html?id=12345
-    return (lc($uri->authority) eq 'rt.wikimedia.org'
-           and $uri->path =~ m|^/Ticket/Display\.html$|
-           and $uri->query_param('id') =~ /^\d+$/) ? 1 : 0;
+    # Allura URLs have this form:
+    #   https://sourceforge.net/p/pywikipediabot/*/349/
+    return (lc($uri->authority) eq 'sourceforge.net'
+           and $uri->path =~ m|^/p/[0-9a-zA-Z_]+/[0-9a-zA-Z_-]+/\d+/?$|) ? 1 : 0;
 }
 
 sub _check_value {
