@@ -40,7 +40,7 @@
 							</li>
         						<li><a href="index.cgi?logout=1" title="Log out">Log&nbsp;out</a></li>
       						[% ELSE %]
-        						<li>Logged&nbsp;in&nbsp;as$nbsp;[%+ user.login FILTER html %]</li>
+        						<li>Logged&nbsp;in&nbsp;as&nbsp;[%+ user.login FILTER html %]</li>
       						[% END %]
 					[% ELSE %]
 						[% IF Param('createemailregexp')
