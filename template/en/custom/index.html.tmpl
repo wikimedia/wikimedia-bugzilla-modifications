@@ -124,11 +124,11 @@ to report a bug</i></a> for some pointers.</b></p>
         </div>
 
   <div style="clear:both;"></div>
-  <hr />
 
     [%# List items of links to more things users can do on this installation. %]
     [% Hook.process('additional_links') %]
 
+  <div id="quicksearch" style="padding-top: 15px; padding-bottom: 20px;">
         <form id="quicksearchForm" name="quicksearchForm" action="buglist.cgi" method="get"
               onsubmit="return checkQuicksearch(this);">
           <div>
@@ -140,6 +140,118 @@ to report a bug</i></a> for some pointers.</b></p>
             <input id="find" type="submit" value="Quick Search">
           </div>
         </form>
+  </div>
+
+  <div id="commonqueries" style="border: 1px grey solid; margin-top:15px; padding:5px">
+    <h2 style="text-align:center;">Common queries for open reports</h2>
+    <table border="0" text-align="left" valign="top">
+    <tr>
+    <td style="vertical-align: top; padding-right: 40px">
+    <ul>
+      [% IF user.id %]
+        <li>
+          [% title = BLOCK %]Assigned to me[% END %]
+          <a href="buglist.cgi?f1=assigned_to&amp;o1=equals&amp;v1=%25user%25&amp;resolution=---">
+            [% title FILTER html %]</a> ([% assignee_count FILTER html %])
+          <a href="buglist.cgi?f1=assigned_to&amp;o1=equals&amp;v1=%25user%25&amp;resolution=---&amp;ctype=atom&amp;title=[% title FILTER uri %]"
+             class="rss">&nbsp;</a>
+          <a href="buglist.cgi?f1=assigned_to&amp;o1=equals&amp;v1=%25user%25&amp;bug_status=ASSIGNED">
+            (with ASSIGNED status)</a>
+        </li>
+        <li>
+          [% title = BLOCK %]Reported by me[% END %]
+          <a href="buglist.cgi?f1=reporter&amp;o1=equals&amp;v1=%25user%25&amp;resolution=---">
+            [% title FILTER html %]</a> ([% reporter_count FILTER html %])
+          <a href="buglist.cgi?f1=reporter&amp;o1=equals&amp;v1=%25user%25&amp;resolution=---&amp;ctype=atom&amp;title=[% title FILTER uri %]"
+             class="rss">&nbsp;</a>
+        </li>
+        [% IF Bugzilla.has_flags %]
+          <li>
+            [% title = BLOCK %]Requests addressed to me[% END %]
+            <a href="request.cgi?action=queue&amp;requestee=[% user.login FILTER uri %]&amp;group=type&amp;do_union=0">
+              [% title FILTER html %]</a> ([% requestee_count FILTER html %])
+            <a href="buglist.cgi?f1=requestees.login_name&amp;o1=equals&amp;v1=%25user%25&amp;ctype=atom&amp;title=[% title FILTER uri %]"
+               class="rss">&nbsp;</a>
+          </li>
+        [% END %]
+      [% END %]
+
+      <li>Actuality (also closed [% terms.bugs %]):
+      <ul>
+      <li>
+        Reported in
+        <a href="buglist.cgi?chfield=%5BBug%20creation%5D&amp;chfieldfrom=24h">last 24 hours</a>
+        [% title = BLOCK %][% terms.Bugs %] reported in the last 24 hours[% END %]
+        <a href="buglist.cgi?chfield=%5BBug%20creation%5D&amp;chfieldfrom=24h&amp;ctype=atom&amp;title=[% title FILTER uri %]"
+           class="rss">&nbsp;</a>
+        | <a href="buglist.cgi?chfield=%5BBug%20creation%5D&amp;chfieldfrom=7d">last 7 days</a>
+        [% title = BLOCK %][% terms.Bugs %] reported in the last 7 days[% END %]
+        <a href="buglist.cgi?chfield=%5BBug%20creation%5D&amp;chfieldfrom=7d&amp;ctype=atom&amp;title=[% title FILTER uri %]"
+           class="rss">&nbsp;</a>
+      </li>
+      <li>
+        Changed in
+        <a href="buglist.cgi?chfieldfrom=24h">last 24 hours</a>
+        [% title = BLOCK %][% terms.Bugs %] changed in the last 24 hours[% END %]
+        <a href="buglist.cgi?chfieldfrom=24h&amp;ctype=atom&amp;title=[% title FILTER uri %]"
+           class="rss">&nbsp;</a>
+        | <a href="buglist.cgi?chfieldfrom=7d">last 7 days</a>
+        [% title = BLOCK %][% terms.Bugs %] changed in the last 7 days[% END %]
+        <a href="buglist.cgi?chfieldfrom=7d&amp;ctype=atom&amp;title=[% title FILTER uri %]"
+           class="rss">&nbsp;</a>
+      </li>
+      </ul>
+      </li>
+      <li>Actionability:
+      <ul>
+      <li>
+        <a href="buglist.cgi?bug_status=PATCH_TO_REVIEW">In PATCH_TO_REVIEW status</a>
+        [% title = BLOCK %][% terms.Bugs %] in PATCH_TO_REVIEW status[% END %]
+        <a href="buglist.cgi?bug_status=PATCH_TO_REVIEW&amp;ctype=atom&amp;title=[% title FILTER uri %]"
+           class="rss">&nbsp;</a>
+      </li>
+      <li>
+      Without changes for
+      <a href="buglist.cgi?chfieldto=-6m&amp;resolution=---">6 months</a>
+      | <a href="buglist.cgi?chfieldto=-2y&amp;resolution=---">2 years</a>
+      </li>
+      </ul>
+      </li>
+      </ul>
+      </td>
+      <td style="vertical-align: top;">
+      <ul>
+      <li>Product Planning:
+      <ul>
+      <li>
+        <a href="report.cgi?x_axis_field=product&amp;y_axis_field=target_milestone&amp;product=Huggle&amp;product=MediaWiki&amp;product=MediaWiki+extensions&amp;product=VisualEditor&amp;product=Wikimedia&amp;resolution=---&amp;j_top=AND&amp;format=table&amp;action=wrap">Product &times; Target Milestone</a>
+      </li>
+      <li>
+        <a href="report.cgi?x_axis_field=priority&y_axis_field=bug_severity&z_axis_field=product&resolution=---&format=table&action=wrap">Priority &times; Severity per product</a>
+      </li>
+      <li>
+        <a href="describekeywords.cgi">Keywords</a>
+      </li>
+      </ul>
+      </li>
+      <li>Popularity:
+      <ul>
+      <li>
+        &gt;=20 votes: <a href="buglist.cgi?votes_type=greaterthaneq&amp;votes=20&amp;resolution=---">All</a> |
+          <a href="buglist.cgi?votes_type=greaterthaneq&amp;votes=20&amp;resolution=---&amp;product=MediaWiki">MediaWiki</a> |
+          <a href="buglist.cgi?votes_type=greaterthaneq&amp;votes=20&amp;resolution=---&amp;product=MediaWiki%20extensions">MediaWiki ext.</a> |
+          <a href="buglist.cgi?votes_type=greaterthaneq&amp;votes=20&amp;resolution=---&amp;product=Wikimedia">Wikimedia</a>
+      </li>
+      <li>
+        <a href="duplicates.cgi">High number of duplicates</a>
+      </li>
+      </ul>
+      </li>
+    </ul>
+   </td>
+   </tr>
+   </table>
+  </div>
         <div class="outro">[% Hook.process('outro') %]</div>
 </div>
 

@@ -159,6 +159,14 @@ div#docslinks {
     margin: 0;
 }
 
+/* WIKIMEDIA START 22170 */
+.rss {
+    background: transparent url(./images/rss.png) no-repeat;
+    padding-left: 16px;
+    line-height: 1.5em;
+}
+/* WIKIMEDIA END 22170 */
+
 /**************************/
 /* Bug links and statuses */
 /**************************/
