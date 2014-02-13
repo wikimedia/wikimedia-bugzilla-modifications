@@ -87,12 +87,22 @@
 				<div class="portal">
 					<h5>Saved Searches</h5>
 					<div class="body">
-						<ul>
+						<ul id="links-saved">
 							[% PROCESS "global/search-links.html.tmpl" %]
 						</ul>
 					</div>
 				</div>
-				[% END %]				
+				[% END %]
+				[% IF user.reports.size %]
+				<div class="portal">
+					<h5>Saved Reports</h5>
+					<div class="body">
+						<ul id="reports-saved">
+							[% PROCESS "global/saved-reports.html.tmpl" %]
+						</ul>
+					</div>
+				</div>
+				[% END %]
 				<!-- /interaction -->
 				<!-- toolbox -->
 				<div class="portal">

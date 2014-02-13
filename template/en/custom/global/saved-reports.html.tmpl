@@ -1,0 +1,11 @@
+[%# This file is template/en/default/global/useful-links.html.tmpl in upstream  %]
+
+  [%# Saved reports %]
+
+  [% IF user.reports.size %]
+        [% FOREACH r = user.reports %]
+          <li>
+          <a href="report.cgi?[% r.query FILTER html %]&amp;saved_report_id=
+                  [%~ r.id FILTER uri %]">[% r.name FILTER html %]</a></li>
+        [% END %]
+  [% END %]
