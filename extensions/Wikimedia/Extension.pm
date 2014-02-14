@@ -68,8 +68,9 @@ sub bug_format_comment {
 		replace => \&_createGitCommitLink
 	};
 
+	# Test case: https://bugzilla.wikimedia.org/60112#c8
 	my $replacerCVE = {
-		match => qr{\b(CVE-\d{4}-\d+)},
+		match => qr{(?<!http://people\.canonical\.com/~ubuntu-security/cve/2013/)\b(CVE-\d{4}-\d+)},
 		replace => \&_createCVELink
 	};
 
