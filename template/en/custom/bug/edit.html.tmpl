@@ -1104,6 +1104,10 @@
         <br>
         [% PROCESS commit_button id=""%]
 
+        [%# WIKIMEDIA START Backport of bmo 944543 %]
+        [% Hook.process("after_comment_commit_button", 'bug/edit.html.tmpl') %]
+        [%# WIKIMEDIA END Backport of bmo 944543 %]
+
         <table id="bug_status_bottom"
                class="status" cellspacing="0" cellpadding="0">
           <tr>
