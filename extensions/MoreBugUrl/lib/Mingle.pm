@@ -30,8 +30,8 @@ use Bugzilla::Util;
 sub should_handle {
     my ($class, $uri) = @_;
     # Mingle URLs have this form:
-    #   https://mingle.corp.wikimedia.org/projects/*/cards/1234
-    return (lc($uri->authority) eq 'mingle.corp.wikimedia.org'
+    #   https://wikimedia.mingle.thoughtworks.com/projects/abcdefgh_ijkl/cards/12345
+    return (lc($uri->authority) eq 'wikimedia.mingle.thoughtworks.com'
            and $uri->path =~ m|^/projects/[0-9a-zA-Z_]+/cards/\d+$|) ? 1 : 0;
 }
 
