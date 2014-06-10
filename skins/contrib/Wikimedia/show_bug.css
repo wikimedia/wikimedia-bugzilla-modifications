@@ -41,3 +41,9 @@ td.bz_section_spacer {
 #votes_container {
     white-space: nowrap;
 }
+#summary_alias_container {
+    font-style: italic;
+}
+#short_desc_nonedit_display, #summary_alias_container small {
+    font-style: normal;
+}
