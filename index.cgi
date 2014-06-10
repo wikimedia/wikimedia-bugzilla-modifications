@@ -61,6 +61,9 @@ if ($user->id) {
    $vars->{assignee_count} =
      $dbh->selectrow_array('SELECT COUNT(*) FROM bugs WHERE assigned_to = ?
                             AND resolution = ""', undef, $user->id);
+   $vars->{assignee_count_assigned} =
+     $dbh->selectrow_array('SELECT COUNT(*) FROM bugs WHERE assigned_to = ?
+                            AND bug_status = "ASSIGNED"', undef, $user->id);
    $vars->{reporter_count} =
      $dbh->selectrow_array('SELECT COUNT(*) FROM bugs WHERE reporter = ?
                             AND resolution = ""', undef, $user->id);

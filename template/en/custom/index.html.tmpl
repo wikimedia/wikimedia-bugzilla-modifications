@@ -136,8 +136,15 @@ to report a bug</i></a> for some pointers.</b></p>
             [% title FILTER html %]</a> ([% assignee_count FILTER html %])
           <a href="buglist.cgi?f1=assigned_to&amp;o1=equals&amp;v1=%25user%25&amp;resolution=---&amp;ctype=atom&amp;title=[% title FILTER uri %]"
              class="rss">&nbsp;</a>
-          <a href="buglist.cgi?f1=assigned_to&amp;o1=equals&amp;v1=%25user%25&amp;bug_status=ASSIGNED">
-            (with ASSIGNED status)</a>
+          <ul>
+            <li>
+              [% title = BLOCK %]Assigned to me with ASSIGNED status[% END %]
+              <a href="buglist.cgi?f1=assigned_to&amp;o1=equals&amp;v1=%25user%25&amp;bug_status=ASSIGNED">
+            [% title FILTER html %]</a> ([% assignee_count_assigned FILTER html %])
+            <a href="buglist.cgi?f1=assigned_to&amp;o1=equals&amp;v1=%25user%25&amp;bug_status=ASSIGNED;ctype=atom&amp;title=[% title FILTER uri %]"
+             class="rss">&nbsp;</a>
+            </li>
+          </ul>
         </li>
         <li>
           [% title = BLOCK %]Reported by me[% END %]
