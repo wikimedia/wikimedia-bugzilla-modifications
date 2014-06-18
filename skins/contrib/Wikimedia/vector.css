@@ -448,11 +448,6 @@ dd {
 	background: url(images/external-link-ltr-icon.png) center right no-repeat;
 	padding: 0 13px 0 0;
 }
-#content-container a[href ^="https://"],
-.link-https {
-	background: url(images/lock-icon.png) center right no-repeat;
-	padding: 0 18px 0 0;
-}
 #content-container a[href ^="mailto:"],
 .link-mailto {
 	background: url(images/mail-icon.png) center right no-repeat;
