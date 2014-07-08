@@ -123,7 +123,8 @@
     [% END %]
 
     [% IF user.settings.skin.value=='Wikimedia' %]
-      <link rel="stylesheet" href="skins/contrib/Wikimedia/vector.css" media="screen" />
+      <link rel="stylesheet" href="[% 'skins/contrib/Wikimedia/vector.css' FILTER mtime FILTER html %]" media="screen"
+            title="[% setting_descs.${user.settings.skin.value} || user.settings.skin.value FILTER html %]" />
     [% END %]
 
 
