@@ -205,8 +205,9 @@ sub validateContext
 {
   my $context = $cgi->param('context') || "patch";
   if ($context ne "file" && $context ne "patch") {
-    detaint_natural($context)
-      || ThrowUserError("invalid_context", { context => $cgi->param('context') });
+      my $orig_context = $context;
+      detaint_natural($context)
+        || ThrowUserError("invalid_context", { context => $orig_context });
   }
 
   return $context;
