@@ -273,9 +273,10 @@ sub _strip_undefs {
             }
         }
     }
+
 # BEGIN workaround for https://bugzilla.wikimedia.org/show_bug.cgi?id=69747
 if (ref $initial eq '') {
-$initial =~ s/([\x01-\x08\x0b\x0c\x0f-\x1f])/sprintf "\\x%02x", ord($1)/ge;
+$initial =~ s/([\x01-\x08\x0b\x0c\x0e\x0f-\x1f])/sprintf "\\x%02x", ord($1)/ge;
 }
 # END workaround for https://bugzilla.wikimedia.org/show_bug.cgi?id=69747
     return $initial;
